@@ -1,0 +1,58 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+  <!-- <link rel="stylesheet" href="{% static 'css/financial_control.css' %}" /> -->
+  <link rel="stylesheet" href="{% static 'css/financial_control_1.css' %}" />
+
+  <script src="https://kit.fontawesome.com/417f08d9c2.js" crossorigin="anonymous"></script>
+
+  {% block css %}
+  {% endblock css %}
+
+  <title>Financial Control</title>
+</head>
+
+<body>
+  <div class="wrapper">
+
+    <ul id="sidebar" #" class="sidebar">
+      <div class="sidebar-header">
+        <a href="{% url 'index' %}" style="color: inherit;"><i class="fas fa-tenge fa-3x"></i></a>
+      </div>
+
+      {% include 'includes/components/sidebar/sidebar_item.html' with url='index' icon='fa-tachometer-alt' description='Dashboard' %}
+      {% include 'includes/components/sidebar/sidebar_item.html' with url='account_list' icon='fa-wallet' description='Accounts' %}
+      {% include 'includes/components/sidebar/sidebar_item.html' with url='category_list' icon='fa-tag' description='Categories' %}
+      {% include 'includes/components/sidebar/sidebar_item.html' with url='entry_list' icon='fa-money-bill-alt' description='Entries' %}
+    </ul>
+
+    <div class="container content">
+      {% block main %}
+      {% endblock %}
+    </div>
+  </div>acc
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+  </script>
+  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/financial_control.js' %}"></script>
+
+  {% block script %}
+  {% endblock %}
+
+</body>
+
+</html>

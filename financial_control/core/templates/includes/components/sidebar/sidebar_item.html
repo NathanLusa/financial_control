@@ -1,0 +1,6 @@
+<li class="sidebar-item {% if request.resolver_match.url_name == url %}active{% endif %}">
+  <a href="{% url url %}">
+    <i class="fas {{ icon }}"></i>
+    <p>{{ description }}</p>
+  </a>
+</li>

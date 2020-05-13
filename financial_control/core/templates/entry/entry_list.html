@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card shadow p-3 mb-5 bg-white rounded">
+      <h4 class="card-header">Entries</h4>
+      <div class="card-body">
+        {% if entries %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Description</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in entries %}
+            <tr class="table-item-link" data-href="{% url 'entry_form' entry.id %}">
+              <th scope="row">{{ entry.id }}</th>
+              <td>{{ entry.description }}</td>
+              <td>{{ entry.get_status_label }}</td>
+            </tr>
+            {% endfor  %}
+          </tbody>
+        </table>
+        {% else %}
+        <div style="display: flex; justify-content: center;">
+          <h6>No data found</h6>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock main %}

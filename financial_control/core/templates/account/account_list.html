@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card shadow p-3 mb-5 bg-white rounded">
+      <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h4>Accounts</h4>
+        <h4 class="btn btn-outline-primary">+</h4>
+      </div>
+      <div class="card-body">
+        {% if accounts %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Description</th>
+              <th scope="col">Status</th>
+              <th scope="col">Type</th>
+              <th scope="col">Opening Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for account in accounts %}
+            <tr class="table-item-link" data-href="{% url 'account_form' account.id %}">
+              <th scope="row">{{ account.id }}</th>
+              <td>{{ account.description }}</td>
+              <td>{{ account.get_status_label }}</td>
+              <td>{{ account.get_type_label }}</td>
+              <td>{{ account.opening_balance }}</td>
+            </tr>
+            {% endfor  %}
+          </tbody>
+        </table>
+        {% else %}
+        <div style="display: flex; justify-content: center;">
+          <h6>No data found</h6>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock main %}

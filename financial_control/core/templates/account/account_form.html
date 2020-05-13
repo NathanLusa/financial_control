@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main %}
+
+<h1>Account form</h1>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  {% include 'includes/bootstrap_form.html' with form=form %}
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock main %}
