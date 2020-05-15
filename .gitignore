@@ -5,6 +5,7 @@
 
 # production
 /build
+/financial_control/deploy/static/CACHE
 
 # python
 *.pyc

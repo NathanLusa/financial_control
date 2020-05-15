@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # 3rd party
     'rest_framework',
     'widget_tweaks',
+    'compressor',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,20 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# STATIC_ROOT = os.path.join(BASE_DIR, "deploy/static"),
+STATIC_ROOT = "/Users/nathanlusa/git/python/financial_control_django/financial_control/deploy/static"
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+]
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)
