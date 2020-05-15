@@ -1,9 +1,9 @@
 :root {
   --sidebar-width: 250px;
 
-  --sidebar-bg-color: #7386d5;
+  /* --sidebar-bg-color: #7386d5;
   --sidebar-bg-color-light: #8396ec;
-  --sidebar-bg-color-dark: #6b7bbb;
+  --sidebar-bg-color-dark: #6b7bbb; */
 
   /* --sidebar-bg-color: #58a094;
   --sidebar-bg-color-light: #69a99d;
@@ -14,13 +14,6 @@
   --sidebar-bg-color-dark: #50988C;
 
 }
-
-/* div,
-a,
-ul,
-li {
-  border: solid black;
-} */
 
 .wrapper {
   display: flex;
@@ -35,13 +28,10 @@ li {
   transition: all 0.3s;
 }
 
-#sidebar {
+.sidebar {
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-.sidebar {
   min-width: var(--sidebar-width);
   max-width: var(--sidebar-width);
   border-top-right-radius: 25px;
@@ -96,6 +86,7 @@ li {
   color: #fff;
 }
 
+.sidebar-header i:hover,
 .sidebar-item:hover i,
 .sidebar-item.active i {
   color: #eccb10;
