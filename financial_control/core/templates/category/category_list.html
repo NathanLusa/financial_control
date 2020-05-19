@@ -7,7 +7,10 @@
 <div class="row">
   <div class="col-md-12">
     <div class="card shadow p-3 mb-5 bg-white rounded">
-      <h4 class="card-header">Categories</h4>
+      <div class="card-header">
+        <h4>Categories</h4>
+        <a class="btn btn-outline-primary" href="{% url 'category_new' %}">+</a>
+      </div>
       <div class="card-body">
         {% if categories %}
         <table class="table">
@@ -16,6 +19,7 @@
               <th scope="col">#</th>
               <th scope="col">Description</th>
               <th scope="col">Status</th>
+              <th scope="col">Movement type</th>
             </tr>
           </thead>
           <tbody>
@@ -24,6 +28,7 @@
               <th scope="row">{{ category.id }}</th>
               <td>{{ category.description }}</td>
               <td>{{ category.get_status_label }}</td>
+              <td>{{ category.get_movement_type_label }}</td>
             </tr>
             {% endfor  %}
           </tbody>

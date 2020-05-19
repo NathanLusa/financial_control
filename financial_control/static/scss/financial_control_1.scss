@@ -104,6 +104,12 @@ $sidebar-bg-color-dark: #50988C;
   }
 }
 
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 tr.table-item-link {
   cursor: pointer;
 }

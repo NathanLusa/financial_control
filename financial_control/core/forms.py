@@ -1,12 +1,23 @@
 from django.forms import ModelForm
-from .models import Account
+
+from .models import Account, Category
+from .fields import DateField  # , CharField, TimeField
 
 
 class AccountForm(ModelForm):
+
+    opening_balance_date = DateField()
+
     class Meta:
         model = Account
         fields = ['description', 'status', 'type', 'opening_balance',
                   'opening_type', 'opening_balance_date']
+
+
+class CategoryForm(ModelForm):
+    class Meta:
+        model = Category
+        fields = ['description', 'status', 'movement_type']
 
     # name = forms.CharField(max_length=30)
     # email = forms.EmailField(max_length=254)

@@ -4,11 +4,11 @@
 
 {% block main %}
 
-<h1>Account form</h1>
+<h1>Category form</h1>
 
-{% url 'account_delete' id as delete_url %}
+{% url 'category_delete' id as delete_url %}
 <!-- Modal -->
-{% include 'includes/bootstrap_modal_delete.html' with delete_url=delete_url title='Delete' message='Are you sure you want to delete this account?' %}
+{% include 'includes/bootstrap_modal_delete.html' with delete_url=delete_url title='Delete' message='Are you sure you want to delete this category?' %}
 
 <form method="post" novalidate>
   {% csrf_token %}
@@ -17,6 +17,7 @@
 
   <button type="submit" class="btn btn-primary">Save</button>
   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalDelete">Delete</button>
+
 </form>
 
 {% endblock main %}
