@@ -16,14 +16,19 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Account',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('description', models.CharField(max_length=50)),
-                ('status', models.IntegerField(choices=[(0, 'Inactive'), (1, 'Active')], default=core.common.enums.StatusTypes['ACTIVE'])),
-                ('type', models.IntegerField(choices=[(0, 'Checking Account'), (1, 'Money'), (2, 'Other')], default=core.common.enums.AccountTypes['CA'])),
-                ('opening_balance', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('opening_type', models.IntegerField(choices=[(0, 'Negative'), (1, 'Positive')], default=core.common.enums.MovementTypes['POSITIVE'])),
+                ('status', models.IntegerField(choices=[
+                 (0, 'Inactive'), (1, 'Active')], default=core.common.enums.StatusTypes['ACTIVE'])),
+                ('type', models.IntegerField(choices=[(0, 'Checking Account'), (1, 'Money'), (
+                    2, 'Other')], default=core.common.enums.AccountTypes['CA'])),
+                ('opening_balance', models.DecimalField(
+                    decimal_places=2, max_digits=10)),
+                ('opening_type', models.IntegerField(choices=[
+                 (0, 'Negative'), (1, 'Positive')], default=core.common.enums.MovementTypes['POSITIVE'])),
                 ('opening_balance_date', models.DateField()),
             ],
             options={
@@ -33,29 +38,37 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Category',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('description', models.CharField(max_length=50)),
-                ('status', models.IntegerField(choices=[(0, 'Inactive'), (1, 'Active')], default=core.common.enums.StatusTypes['ACTIVE'])),
-                ('movement_type', models.IntegerField(choices=[(0, 'Negative'), (1, 'Positive')])),
+                ('status', models.IntegerField(choices=[
+                 (0, 'Inactive'), (1, 'Active')], default=core.common.enums.StatusTypes['ACTIVE'])),
+                ('movement_type', models.IntegerField(
+                    choices=[(0, 'Negative'), (1, 'Positive')])),
             ],
             options={
                 'abstract': False,
             },
         ),
         migrations.CreateModel(
-            name='Entry',
+            name='Transaction',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('value', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('date', models.DateField()),
-                ('description', models.CharField(blank=True, max_length=50, null=True)),
-                ('observation', models.CharField(blank=True, max_length=200, null=True)),
-                ('account', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='entries', to='core.Account')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='core.Category')),
+                ('description', models.CharField(
+                    blank=True, max_length=50, null=True)),
+                ('observation', models.CharField(
+                    blank=True, max_length=200, null=True)),
+                ('account', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT,
+                                              related_name='transactions', to='core.Account')),
+                ('category', models.ForeignKey(
+                    on_delete=django.db.models.deletion.PROTECT, to='core.Category')),
             ],
             options={
                 'abstract': False,

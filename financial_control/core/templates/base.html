@@ -20,6 +20,15 @@
 
   <script src="https://kit.fontawesome.com/417f08d9c2.js" crossorigin="anonymous"></script>
 
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+
   {% block css %}
   {% endblock css %}
 
@@ -31,28 +40,21 @@
 
     <ul class="sidebar">
       <div class="sidebar-header">
-        <a href="{% url 'index' %}" style="color: inherit;"><i class="fas fa-tenge fa-3x"></i></a>
+        <a href="{% url 'dashboard' %}" style="color: inherit;"><i class="fas fa-tenge fa-3x"></i></a>
       </div>
 
-      {% include 'includes/components/sidebar/sidebar_item.html' with url='index' icon='fa-tachometer-alt' description='Dashboard' %}
+      {% include 'includes/components/sidebar/sidebar_item.html' with url='dashboard' icon='fa-tachometer-alt' description='Dashboard' %}
       {% include 'includes/components/sidebar/sidebar_item.html' with url='account_list' icon='fa-wallet' description='Accounts' %}
       {% include 'includes/components/sidebar/sidebar_item.html' with url='category_list' icon='fa-tag' description='Categories' %}
-      {% include 'includes/components/sidebar/sidebar_item.html' with url='entry_list' icon='fa-money-bill-alt' description='Entries' %}
+      {% include 'includes/components/sidebar/sidebar_item.html' with url='transaction_list' icon='fa-money-bill-alt' description='Transactions' %}
     </ul>
 
-    <div class="container content">
+    <div class="container-fluid content">
       {% block main %}
       {% endblock %}
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
-  </script>
-  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
   <script src="{% static 'js/financial_control.js' %}"></script>
 
   {% block script %}

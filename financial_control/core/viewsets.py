@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Account, Category, Entry
-from .serializers import AccountSerializer, CategorySerializer, EntrySerializer
+from .models import Account, Category, Transaction
+from .serializers import AccountSerializer, CategorySerializer, TransactionSerializer
 
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -13,7 +13,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
 
 
-class EntryViewSet(viewsets.ModelViewSet):
-    queryset = Entry.objects.all()
-    serializer_class = EntrySerializer
-
+class TransactionViewSet(viewsets.ModelViewSet):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer

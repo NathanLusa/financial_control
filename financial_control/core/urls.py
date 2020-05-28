@@ -1,21 +1,23 @@
-from django.urls import path, include, register_converter
+from django.urls import path, include, register_converter, re_path
 from rest_framework import routers
 
 from . import views
-from .viewsets import AccountViewSet, CategoryViewSet, EntryViewSet
+from . import api_views
+from .viewsets import AccountViewSet, CategoryViewSet, TransactionViewSet
 from .url_converter import OptionalIntConverter
 
 router = routers.SimpleRouter()
 router.register(r'accounts', AccountViewSet)
 router.register(r'categories', CategoryViewSet)
-router.register(r'entries', EntryViewSet)
+router.register(r'transactions', TransactionViewSet)
 
 register_converter(OptionalIntConverter, 'optional_int')
 
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.dashboard, name='dashboard'),
     path('api/', include(router.urls)),
+    re_path('api/dashboard/$', api_views.dashboard, name='api_dashboard'),
 
     path('accounts/', views.account_list, name='account_list'),
     path('accounts/new', views.account_new, name='account_new'),
@@ -28,8 +30,9 @@ urlpatterns = [
     path('categories/<int:pk>/delete',
          views.category_delete, name='category_delete'),
 
-    path('entries/', views.entry_list, name='entry_list'),
-    # path('entries/new', views.entry_new, name='entry_new'),
-    path('entries/<int:pk>', views.entry_form, name='entry_form'),
-    path('entries/<int:pk>/delete', views.entry_delete, name='entry_delete'),
+    path('transactions/', views.transaction_list, name='transaction_list'),
+    # path('transactions/new', views.transaction_new, name='transaction_new'),
+    path('transactions/<int:pk>', views.transaction_form, name='transaction_form'),
+    path('transactions/<int:pk>/delete', views.transaction_delete,
+         name='transaction_delete'),
 ]

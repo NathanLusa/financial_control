@@ -7,9 +7,9 @@
 <div class="row">
   <div class="col-md-12">
     <div class="card shadow p-3 mb-5 bg-white rounded">
-      <h4 class="card-header">Entries</h4>
+      <h4 class="card-header">Transactions</h4>
       <div class="card-body">
-        {% if entries %}
+        {% if transactions %}
         <table class="table">
           <thead>
             <tr>
@@ -19,11 +19,11 @@
             </tr>
           </thead>
           <tbody>
-            {% for entry in entries %}
-            <tr class="table-item-link" data-href="{% url 'entry_form' entry.id %}">
-              <th scope="row">{{ entry.id }}</th>
-              <td>{{ entry.description }}</td>
-              <td>{{ entry.get_status_label }}</td>
+            {% for transaction in transactions %}
+            <tr class="table-item-link" data-href="{% url 'transaction_form' transaction.id %}">
+              <th scope="row">{{ transaction.id }}</th>
+              <td>{{ transaction.description }}</td>
+              <td>{{ transaction.get_status_label }}</td>
             </tr>
             {% endfor  %}
           </tbody>

@@ -4,7 +4,7 @@ from .common.models import BaseModel
 
 
 class Account(BaseModel):
-    description = models.CharField(max_length=50, null=False, blank=False)
+    description = models.CharField(max_length=25, null=False, blank=False)
     status = models.IntegerField(
         choices=StatusTypes.choices(), default=StatusTypes.ACTIVE)
     type = models.IntegerField(
@@ -28,7 +28,7 @@ class Account(BaseModel):
 
 
 class Category(BaseModel):
-    description = models.CharField(max_length=50)
+    description = models.CharField(max_length=25)
     status = models.IntegerField(
         choices=StatusTypes.choices(), default=StatusTypes.ACTIVE)
     movement_type = models.IntegerField(
@@ -44,12 +44,12 @@ class Category(BaseModel):
         return MovementTypes(self.movement_type).description
 
 
-class Entry(BaseModel):
+class Transaction(BaseModel):
     value = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
     description = models.CharField(max_length=50, null=True, blank=True)
     account = models.ForeignKey(
-        Account, on_delete=models.PROTECT, related_name='entries')
+        Account, on_delete=models.PROTECT, related_name='transactions')
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     observation = models.CharField(max_length=200, null=True, blank=True)
 

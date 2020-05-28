@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import AccountForm, CategoryForm
-from .models import Account, Category, Entry
+from .models import Account, Category, Transaction
 
 
-def index(request):
-    return render(request, 'index.html')
+def dashboard(request):
+    return render(request, 'dashboard.html')
 
 
 def account_list(request):
@@ -85,23 +85,23 @@ def category_delete(request, pk):
     return redirect('category_list')
 
 
-def entry_list(request):
-    entries = Entry.objects.all()
+def transaction_list(request):
+    transactions = Transaction.objects.all()
 
-    return render(request, 'entry/entry_list.html', {'entries': entries})
-
-
-def entry_form(request, pk):
-    entry = get_object_or_404(Entry, pk=pk)
-
-    return render(request, 'entry/entry_form.html', {'entry': entry, 'id': pk})
+    return render(request, 'transaction/transaction_list.html', {'transactions': transactions})
 
 
-def entry_delete(request, pk):
-    entry = get_object_or_404(Entry, pk=pk)
+def transaction_form(request, pk):
+    transaction = get_object_or_404(Transaction, pk=pk)
+
+    return render(request, 'transaction/transaction_form.html', {'transaction': transaction, 'id': pk})
+
+
+def transaction_delete(request, pk):
+    transaction = get_object_or_404(Transaction, pk=pk)
 
     # and request.user.is_authenticated and request.user.username == creator:
     if request.method == "POST":
-        entry.delete()
+        transaction.delete()
 
-    return redirect('entry_list')
+    return redirect('transaction_list')

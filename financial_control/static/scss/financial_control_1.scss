@@ -10,6 +10,16 @@ $sidebar-bg-color: #555F63;
 $sidebar-bg-color-light: #656F73;
 $sidebar-bg-color-dark: #50988C;
 
+$sidebar-width: 250px;
+$sidebar-width-reduce: 60px;
+$sidebar-max-width-reduce: 1280px;
+
+@mixin hide-text() {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
 .wrapper {
   display: flex;
   width: 100%;
@@ -24,7 +34,10 @@ $sidebar-bg-color-dark: #50988C;
 }
 
 .sidebar {
-  $sidebar-width: 250px;
+  @media (max-width: $sidebar-max-width-reduce) {
+    min-width: $sidebar-width-reduce;
+    max-width: $sidebar-width-reduce;
+  }
 
   list-style: none;
   padding: 0;
@@ -42,9 +55,10 @@ $sidebar-bg-color-dark: #50988C;
   align-items: center;
   justify-content: center;
   padding: 45px;
-  /* background-color: $sidebar-bg-color; */
-  /* display: flex; */
-  /* align-items: "space-between"; */
+
+  @media (max-width: $sidebar-max-width-reduce) {
+    padding: 45px 0px 45px 0px;
+  }
 
   i:hover {
     color: #eccb10;
@@ -58,6 +72,10 @@ $sidebar-bg-color-dark: #50988C;
   border-radius: 8px;
   margin: 0px 20px 4px 20px;
   background-color: $sidebar-bg-color;
+
+  @media (max-width: $sidebar-max-width-reduce) {
+    margin: 0px 0px 4px 0px;
+  }
 
   &:hover {
     background-color: $sidebar-bg-color-light;
@@ -89,6 +107,10 @@ $sidebar-bg-color-dark: #50988C;
 
   p {
     margin: 0;
+
+    @media (max-width: $sidebar-max-width-reduce) {
+      @include hide-text;
+    }
   }
 
   &.active {
@@ -116,4 +138,14 @@ tr.table-item-link {
 
 tr.table-item-link:hover {
   background-color: #eee;
+}
+
+.coluna-1 {
+  min-width: 350px;
+  margin-left: 15px;
+}
+
+#filter {
+  display: block;
+  align-items: center;
 }
