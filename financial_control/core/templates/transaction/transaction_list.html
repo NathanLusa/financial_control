@@ -7,7 +7,10 @@
 <div class="row">
   <div class="col-md-12">
     <div class="card shadow p-3 mb-5 bg-white rounded">
-      <h4 class="card-header">Transactions</h4>
+      <div class="card-header">
+        <h4>Transactions</h4>
+        <a class="btn btn-outline-primary" href="{% url 'transaction_new' %}">+</a>
+      </div>
       <div class="card-body">
         {% if transactions %}
         <table class="table">

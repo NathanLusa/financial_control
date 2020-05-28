@@ -89,7 +89,7 @@ function onClickReload(e) {
   const e_initial_date = document.getElementById('initial_date')
   const e_finish_date = document.getElementById('finish_date')
 
-  let url = new URL('/api/dashboard', document.location)
+  let url = new URL('/api/accounts_statment', document.location)
   url.search = new URLSearchParams({
     initial_date: e_initial_date.value,
     finish_date: e_finish_date.value,

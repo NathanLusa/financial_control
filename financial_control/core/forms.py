@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from .models import Account, Category
+from .models import Account, Category, Transaction
 from .fields import DateField  # , CharField, TimeField
 
 
@@ -38,3 +38,21 @@ class CategoryForm(ModelForm):
     #     message = cleaned_data.get('message')
     #     if not name and not email and not message:
     #         raise forms.ValidationError('You have to write something!')
+
+
+class TransactionForm(ModelForm):
+
+    date = DateField()
+
+    class Meta:
+        model = Transaction
+        fields = ['account', 'date', 'value',
+                  'description', 'observation', 'category']
+
+    # value = models.DecimalField(max_digits=10, decimal_places=2)
+    # date = models.DateField()
+    # description = models.CharField(max_length=50, null=True, blank=True)
+    # account = models.ForeignKey(
+    #     Account, on_delete=models.PROTECT, related_name='transactions')
+    # category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    # observation = models.CharField(max_length=200, null=True, blank=True)

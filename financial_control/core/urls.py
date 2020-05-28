@@ -17,7 +17,8 @@ register_converter(OptionalIntConverter, 'optional_int')
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     path('api/', include(router.urls)),
-    re_path('api/dashboard/$', api_views.dashboard, name='api_dashboard'),
+    re_path('api/accounts_statment/$', api_views.accounts_statment,
+            name='api_accounts_statment'),
 
     path('accounts/', views.account_list, name='account_list'),
     path('accounts/new', views.account_new, name='account_new'),
@@ -31,7 +32,7 @@ urlpatterns = [
          views.category_delete, name='category_delete'),
 
     path('transactions/', views.transaction_list, name='transaction_list'),
-    # path('transactions/new', views.transaction_new, name='transaction_new'),
+    path('transactions/new', views.transaction_new, name='transaction_new'),
     path('transactions/<int:pk>', views.transaction_form, name='transaction_form'),
     path('transactions/<int:pk>/delete', views.transaction_delete,
          name='transaction_delete'),

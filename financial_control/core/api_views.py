@@ -1,17 +1,13 @@
 import calendar
 import sys
 from datetime import date, timedelta
-# from django.shortcuts import get_object_or_404, redirect, render
-from django.core import serializers
 from django.http import JsonResponse
 
 from .common import utils, exceptions
-# from .forms import AccountForm, CategoryForm
 from .models import Account, Category, Transaction
-from .serializers import AccountDashboardSerializer
 
 
-def dashboard(request):
+def accounts_statment(request):
     param_accounts = request.GET.get('accounts')
     param_initial_date = request.GET.get('initial_date')
     param_finish_date = request.GET.get('finish_date')
@@ -31,14 +27,27 @@ def dashboard(request):
         if initial_date > finish_date:
             finish_date = utils.last_day_month(initial_date)
 
-        transactions = Transaction.objects.all()
         transactions_json = []
-        # transactions_json = serializers.serialize('json', transactions)
+        transactions = Transaction.objects.filter(
+            date__gte=initial_date, date__lte=finish_date)
+        for transaction in transactions:
+            item = {
+                'date': transaction.date,
+                'description': transaction.description,
+                'value': transaction.value,
+                'category': transaction.category.description,
+            }
+            transactions_json.append(item)
 
+        accounts_json = []
         accounts = Account.objects.all()
-        accounts_json = AccountDashboardSerializer(accounts, many=True).data
-        # accounts_json = list(accounts.values())
-        # accounts_json = serializers.serialize('json', accounts)
+        for account in accounts:
+            item = {
+                'id': account.id,
+                'description': account.description,
+                'value': 0,
+            }
+            accounts_json.append(item)
 
         data = {
             'initial_date': initial_date,
