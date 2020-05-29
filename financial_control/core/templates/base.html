@@ -14,8 +14,7 @@
   <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
 
   {% compress css %}
-  <!-- <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/financial_control.scss' %}" /> -->
-  <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/financial_control_1.scss' %}" />
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/financial_control.scss' %}" />
   {% endcompress %}
 
   <script src="https://kit.fontawesome.com/417f08d9c2.js" crossorigin="anonymous"></script>
@@ -28,6 +27,7 @@
   </script>
   <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 
+  <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
 
   {% block css %}
   {% endblock css %}

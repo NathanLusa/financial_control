@@ -12,3 +12,7 @@
 
 # scripts
 *.sh
+
+# static
+*.ofx
+*.json

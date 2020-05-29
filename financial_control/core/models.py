@@ -47,7 +47,7 @@ class Category(BaseModel):
 class Transaction(BaseModel):
     value = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
-    description = models.CharField(max_length=50, null=True, blank=True)
+    description = models.CharField(max_length=100, null=True, blank=True)
     account = models.ForeignKey(
         Account, on_delete=models.PROTECT, related_name='transactions')
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
