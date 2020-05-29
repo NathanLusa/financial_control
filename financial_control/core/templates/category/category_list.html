@@ -13,26 +13,33 @@
       </div>
       <div class="card-body">
         {% if categories %}
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Description</th>
-              <th scope="col">Status</th>
-              <th scope="col">Movement type</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for category in categories %}
-            <tr class="table-item-link" data-href="{% url 'category_form' category.id %}">
-              <th scope="row">{{ category.id }}</th>
-              <td>{{ category.description }}</td>
-              <td>{{ category.get_status_label }}</td>
-              <td>{{ category.get_movement_type_label }}</td>
-            </tr>
-            {% endfor  %}
-          </tbody>
-        </table>
+        <div class="row">
+          <div class="col-md-6">
+            <table class="table">
+              <h5>Expense</h5>
+              <tbody>
+                {% for category in categories %}
+
+                {% include 'category/category_table_item.html' with category=category %}
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="col-md-6">
+            <table class="table">
+              <h5>Income</h5>
+              <tbody>
+                {% for category in categories %}
+
+                {% include 'category/category_table_item.html' with category=category %}
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
         {% else %}
         <div style="display: flex; justify-content: center;">
           <h6>No data found</h6>
@@ -42,5 +49,4 @@
     </div>
   </div>
 </div>
-
 {% endblock main %}

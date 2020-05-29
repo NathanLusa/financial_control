@@ -3,8 +3,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import AccountForm, CategoryForm, TransactionForm
 from .models import Account, Category, Transaction
 
+from .common.choices import NoYesChoises
+
 
 def dashboard(request):
+    print(NoYesChoises.NO)
     return render(request, 'dashboard.html')
 
 
@@ -48,7 +51,7 @@ def account_delete(request, pk):
 
 
 def category_list(request):
-    categories = Category.objects.all()
+    categories = Category.objects.all().exclude(is_transaction=NoYesChoises.YES)
     return render(request, 'category/category_list.html', {'categories': categories})
 
 

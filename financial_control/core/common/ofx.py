@@ -24,7 +24,7 @@ def write_in_file(file, transaction):
         "description": transaction.memo if len(transaction.memo) > 100 else transaction.memo[:100],
         "observation": "",
         "account": 1,
-        "category": 2
+        "category": 18
     }
     file.writelines(json.dumps(to_write) + ',\n')
 

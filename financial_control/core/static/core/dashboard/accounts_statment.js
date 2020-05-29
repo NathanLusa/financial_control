@@ -17,7 +17,7 @@ function handleErrors(response) {
 
 function setTransactionsToTable(transactions) {
   var table = document.getElementById("table-transactions");
-  var accumulated = 0
+  var accumulated = 0.0
 
   clearInnerHTML("table-transactions");
 
@@ -33,13 +33,14 @@ function setTransactionsToTable(transactions) {
     var cell3 = row.insertCell(2);
     var cell4 = row.insertCell(3);
 
-    accumulated = accumulated + transaction.value
+    amount = parseFloat(transaction.value)
+    accumulated += amount
 
     // Add some text to the new cells:
     cell1.innerHTML = transaction.date;
     cell2.innerHTML = transaction.description;
-    cell3.innerHTML = "R$ " + transaction.value;
-    cell4.innerHTML = "R$ " + accumulated;
+    cell3.innerHTML = "R$ " + amount.toFixed(2);
+    cell4.innerHTML = "R$ " + accumulated.toFixed(2);
   });
 }
 
@@ -122,4 +123,4 @@ buttonClear.onclick = onClickClear;
 buttonMain.onclick = main;
 buttonReload.onclick = onClickReload;
 
-// main()
+onClickReload()

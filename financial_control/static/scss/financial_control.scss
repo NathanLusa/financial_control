@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 // $sidebar-bg-color: #7386d5;
 // $sidebar-bg-color-light: #8396ec;
 // $sidebar-bg-color-dark: #6b7bbb;
@@ -14,6 +16,9 @@ $sidebar-width: 250px;
 $sidebar-width-reduce: 60px;
 $sidebar-max-width-reduce: 1280px;
 
+$content-font-size: 0.75rem;
+$form-control-font-size: 0.9rem;
+
 @mixin hide-text() {
   position: absolute;
   top: -9999px;
@@ -24,6 +29,7 @@ $sidebar-max-width-reduce: 1280px;
   display: flex;
   width: 100%;
   align-items: stretch;
+  font-family: 'Roboto', sans-serif;
 }
 
 .content {
@@ -31,6 +37,11 @@ $sidebar-max-width-reduce: 1280px;
   padding: 20px;
   min-height: 100vh;
   transition: all 0.3s;
+  font-size: $content-font-size;
+
+  .form-control {
+    font-size: $form-control-font-size;
+  }
 }
 
 .sidebar {
@@ -140,9 +151,8 @@ tr.table-item-link:hover {
   background-color: #eee;
 }
 
-.coluna-1 {
-  min-width: 350px;
-  margin-left: 15px;
+td del {
+  color: gray;
 }
 
 #filter {

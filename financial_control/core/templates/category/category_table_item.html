@@ -1,0 +1,13 @@
+{% if category.movement_type == 0 %}
+<tr class="table-item-link" data-href="{% url 'category_form' category.id %}">
+  <td>
+    {% if not category.is_active %}
+    <del>
+      {{ category.description }}
+    </del>
+    {% else %}
+    {{ category.description }}
+    {% endif %}
+  </td>
+</tr>
+{% endif %}
