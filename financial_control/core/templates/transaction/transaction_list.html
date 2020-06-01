@@ -17,6 +17,7 @@
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Date</th>
               <th scope="col">Description</th>
               <th scope="col">Status</th>
             </tr>
@@ -25,6 +26,7 @@
             {% for transaction in transactions %}
             <tr class="table-item-link" data-href="{% url 'transaction_form' transaction.id %}">
               <th scope="row">{{ transaction.id }}</th>
+              <td>{{ transaction.date }}</td>
               <td>{{ transaction.description }}</td>
               <td>{{ transaction.get_status_label }}</td>
             </tr>

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends ajax|yesno:'base_ajax.html,base.html' %}
 
 {% load static %}
 

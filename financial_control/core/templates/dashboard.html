@@ -4,6 +4,10 @@
 
 {% block main %}
 
+<!-- Modal -->
+{% include 'includes/bootstrap_modal.html' with modal_id='modal-dashboard' %}
+
+<!-- Filter -->
 <div class="row">
   <div class="form-group">
     <label for="initial_date">Initial date:</label>
@@ -14,14 +18,13 @@
     <label for="finish_date">Finish date:</label>
     <input type="date" name="finish_date" class="form-control" required="" id="finish_date" value="2020-01-31" required>
   </div>
+  <div style="display: flex; align-items: center; justify-content: center;">
+    <button type="button" class="btn btn-primary" id="button-filter">Filter</button>
+    <button type="button" class="btn btn-warning" id="button-clear">Clear</button>
+  </div>
 </div>
 
-<div class="row">
-  <button id="button-main" class="btn-primary">Main</button>
-  <button id="button-clear" class="btn-warning">Clear</button>
-  <button id="button-reload" class="btn-default">Reload</button>
-</div>
-
+<!-- Tables -->
 <div class="row">
   <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
     <div class="card">
@@ -40,6 +43,10 @@
     <div class="card">
       <div class="card-header">
         <h4>Transactions</h4>
+        <button class="btn btn-outline-primary" id="button-new-transaction"
+          data-href="{% url 'transaction_new' %}?ajax=true&reverse_url=dashboard" data-toggle="modal"
+          data-target="#modal-dashboard" data-modal-title="Transactions">+</button>
+
       </div>
       <div class="card-body">
         <table class="table" id="table-transactions">
@@ -50,10 +57,8 @@
   </div>
 </div>
 
-
-
 {% endblock main %}
 
 {% block script %}
-<script src="{% static 'core/dashboard/accounts_statment.js' %}"></script>
+<script type="module" src="{% static 'js/accounts_statment.js' %}"></script>
 {% endblock script %}

@@ -1,3 +1,5 @@
+from datetime import date
+from django import forms
 from django.forms import ModelForm
 
 from .models import Account, Category, Transaction
@@ -6,7 +8,7 @@ from .fields import DateField  # , CharField, TimeField
 
 class AccountForm(ModelForm):
 
-    opening_balance_date = DateField()
+    opening_balance_date = DateField(autofocus=True)
 
     class Meta:
         model = Account
@@ -42,7 +44,7 @@ class CategoryForm(ModelForm):
 
 class TransactionForm(ModelForm):
 
-    date = DateField()
+    date = DateField(value=date.today())
 
     class Meta:
         model = Transaction

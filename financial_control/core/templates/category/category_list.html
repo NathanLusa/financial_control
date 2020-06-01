@@ -20,7 +20,11 @@
               <tbody>
                 {% for category in categories %}
 
+                {% if category.is_expense %}
+
                 {% include 'category/category_table_item.html' with category=category %}
+
+                {% endif %}
 
                 {% endfor %}
               </tbody>
@@ -33,7 +37,11 @@
               <tbody>
                 {% for category in categories %}
 
+                {% if not category.is_expense %}
+
                 {% include 'category/category_table_item.html' with category=category %}
+
+                {% endif %}
 
                 {% endfor %}
               </tbody>

@@ -45,6 +45,9 @@ class Category(BaseModel):
     def get_movement_type_label(self):
         return MovementTypeChoises(self.movement_type).label
 
+    def is_expense(self):
+        return self.movement_type == MovementTypeChoises.NEGATIVE
+
     def is_active(self):
         return self.status == StatusChoises.ACTIVE
 
@@ -60,3 +63,11 @@ class Transaction(BaseModel):
 
     def __str__(self):
         return '{} - {}'.format(self.description, self.date)
+
+
+class MounthBalance(BaseModel):
+    date = models.DateField()
+    amount = models.DecimalField(max_digits=15, decimal_places=2)
+
+    def __str__(self):
+        return f'{self.date} - {self.amount}'
