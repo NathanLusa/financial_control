@@ -53,7 +53,7 @@ class Category(BaseModel):
 
 
 class Transaction(BaseModel):
-    value = models.DecimalField(max_digits=10, decimal_places=2)
+    value = models.DecimalField(max_digits=15, decimal_places=2)
     date = models.DateField()
     description = models.CharField(max_length=100, null=True, blank=True)
     account = models.ForeignKey(

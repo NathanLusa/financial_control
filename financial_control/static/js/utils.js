@@ -8,8 +8,8 @@ function addListener(element, eventName, handler) {
   }
 }
 
-function setOnClickTableItemLink(on_click_event) {
-  const list = document.getElementsByClassName("table-item-link");
+function setOnClickEvent(class_name, on_click_event) {
+  const list = document.getElementsByClassName(class_name);
 
   if (on_click_event) {
     for (const key in list) {
@@ -24,5 +24,5 @@ function setOnClickTableItemLink(on_click_event) {
 
 export {
   addListener,
-  setOnClickTableItemLink
+  setOnClickEvent
 }

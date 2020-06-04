@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
@@ -7,8 +8,11 @@ from .models import Account, Category, Transaction
 from .common.choices import NoYesChoises
 
 
+def index(request):
+    return redirect('dashboard')
+
+
 def dashboard(request):
-    print(NoYesChoises.NO)
     return render(request, 'dashboard.html')
 
 
@@ -20,19 +24,18 @@ def account_list(request):
 
 def account_new(request):
     if request.method == 'POST':
-        param_reverse_url = request.GET.get('reverse_url')
+        next = request.GET.get('next', 'account_list')
         form = AccountForm(request.POST)
         if form.is_valid():
             form.save()
-            if param_reverse_url == 'None':
-                param_reverse_url = 'account_list'
-            return redirect(param_reverse_url)
+
+            return redirect(next)
 
     form = AccountForm()
     param_ajax = request.GET.get('ajax')
     url_post = reverse('account_new')
-    param_reverse_url = request.GET.get('reverse_url')
-    return render(request, 'account/account_form.html', {'form': form, 'url_post': url_post, 'ajax': param_ajax, 'reverse_url': param_reverse_url})
+    param_next = request.GET.get('next')
+    return render(request, 'account/account_form.html', {'form': form, 'url_post': url_post, 'ajax': param_ajax, 'next': param_next})
 
 
 def account_form(request, pk):
@@ -98,46 +101,56 @@ def category_delete(request, pk):
 
 
 def transaction_list(request):
-    transactions = Transaction.objects.all()
+    transactions = Transaction.objects.all().order_by('-id')
 
     return render(request, 'transaction/transaction_list.html', {'transactions': transactions})
 
 
 def transaction_new(request):
     if request.method == 'POST':
-        param_reverse_url = request.GET.get('reverse_url')
-        print(param_reverse_url)
+        next = request.GET.get('next', 'transaction_list')
         form = TransactionForm(request.POST)
         if form.is_valid():
             form.save()
-            if param_reverse_url == 'None':
-                param_reverse_url = 'transaction_list'
-            return redirect(param_reverse_url)
+
+            return redirect(next)
+        else:
+            print(f'errors: {form.errors}')
+            return JsonResponse({'error': 500, 'message': form.errors}, status=400)
 
     form = TransactionForm()
     param_ajax = request.GET.get('ajax')
     url_post = reverse('transaction_new')
-    param_reverse_url = request.GET.get('reverse_url')
-    return render(request, 'transaction/transaction_form.html', {'form': form, 'url_post': url_post, 'ajax': param_ajax, 'reverse_url': param_reverse_url})
+    param_next = request.GET.get('next')
+    return render(request, 'transaction/transaction_form.html', {'form': form, 'url_post': url_post, 'ajax': param_ajax, 'next': param_next})
 
 
 def transaction_form(request, pk):
-    print('transaction')
     transaction = get_object_or_404(Transaction, pk=pk)
     if request.method == 'POST':
-        param_reverse_url = request.GET.get('reverse_url')
+        next = request.GET.get('next', 'transaction_list')
         form = TransactionForm(request.POST, instance=transaction)
         if form.is_valid():
             form.save()
-            if param_reverse_url == 'None':
-                param_reverse_url = 'transaction_list'
-            return redirect(param_reverse_url)
+
+            return redirect(next)
+        else:
+            print(f'errors: {form.errors}')
+
+    param_ajax = request.GET.get('ajax')
+    param_next = request.GET.get('next')
 
     form = TransactionForm(instance=transaction)
-    param_ajax = request.GET.get('ajax')
     url_post = reverse('transaction_form', args=[pk])
-    param_reverse_url = request.GET.get('reverse_url')
-    return render(request, 'transaction/transaction_form.html', {'form': form, 'id': pk, 'url_post': url_post, 'ajax': param_ajax, 'reverse_url': param_reverse_url})
+
+    next_url = ''
+    next_transaction_list = Transaction.objects.all().order_by('date', '-value')
+    # next_transaction_list.get(pk=pk)
+    next_transaction = False
+    if next_transaction:
+        next_url = reverse('transaction_form', args=[next_transaction.id])
+
+    return render(request, 'transaction/transaction_form.html', {'form': form, 'id': pk, 'url_post': url_post, 'ajax': param_ajax, 'next': param_next, 'next_url': next_url})
 
 
 def transaction_delete(request, pk):

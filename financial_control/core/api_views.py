@@ -35,14 +35,14 @@ def get_parameters_account_statments(request):
 def get_transactions_json(transactions):
     transactions_json = []
     for transaction in transactions:
-        params = '?ajax=true&reverse_url=dashboard'
+        params = '?ajax=true&next=dashboard'
 
         url_reverse = reverse('transaction_form', args=[transaction.id])
         url_reverse += params
 
         item = {
             'id': transaction.id,
-            'date': transaction.date,
+            'date': transaction.date.isoformat(),
             'description': transaction.description,
             'value': transaction.value,
             'category': transaction.category.description,
@@ -75,7 +75,7 @@ def accounts_statment(request):
         accounts_json = get_accounts_json(accounts)
 
         transactions = Transaction.objects.filter(
-            date__gte=initial_date, date__lte=finish_date)
+            date__gte=initial_date, date__lte=finish_date).order_by('date', '-value')
         transactions_json = get_transactions_json(transactions)
 
         data = {

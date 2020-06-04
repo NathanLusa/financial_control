@@ -15,7 +15,8 @@ register_converter(OptionalIntConverter, 'optional_int')
 
 
 urlpatterns = [
-    path('', views.dashboard, name='dashboard'),
+    path('', views.index),
+    path('dashboard/', views.dashboard, name='dashboard'),
     path('api/', include(router.urls)),
     re_path('api/accounts_statment/$', api_views.accounts_statment,
             name='api_accounts_statment'),

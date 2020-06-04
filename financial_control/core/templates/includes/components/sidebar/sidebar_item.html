@@ -1,6 +1,10 @@
-<li class="sidebar-item {% if request.resolver_match.url_name == url %}active{% endif %}">
-  <a href="{% url url %}">
+{% load startswith %}
+
+{% url url as href_item %}
+
+<li class="sidebar-item {% if request.path|startswith:href_item %}active{% endif %}" data-href="{{ href_item }}">
+  <div class="sidebar-item-button">
     <i class="fas {{ icon }}"></i>
     <p>{{ description }}</p>
-  </a>
+  </div>
 </li>

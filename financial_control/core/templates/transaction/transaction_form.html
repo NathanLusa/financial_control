@@ -11,13 +11,15 @@
 <!-- Modal -->
 {% include 'includes/bootstrap_modal_delete.html' with delete_url=delete_url title='Delete' message='Are you sure you want to delete this transaction?' %}
 
-<form method="post" action="{{ url_post }}?reverse_url={{ reverse_url }}">
+<form method="post" action="{{ url_post }}?next={{ next }}">
   {% csrf_token %}
 
   {% include 'includes/bootstrap_form.html' with form=form %}
 
   <button type="submit" class="btn btn-primary">Save</button>
-  {% if not ajax %}
+  {% if ajax %}
+  <button type="button" class="btn btn-primary" id="button-next-transaction" data-href="{{ next_url }}">Next</button>
+  {% else %}
   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalDelete">Delete</button>
   {% endif %}
 

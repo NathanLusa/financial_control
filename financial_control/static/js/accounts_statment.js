@@ -1,6 +1,6 @@
 import {
   addListener,
-  setOnClickTableItemLink
+  setOnClickEvent
 } from './utils.js';
 
 const modal_dashboard = document.getElementById("modal-dashboard")
@@ -9,7 +9,6 @@ const modal_body = modal_dashboard.querySelector(".modal-body")
 
 const buttonClear = document.getElementById("button-clear");
 const buttonFilter = document.getElementById("button-filter");
-const buttonNewAccount = document.getElementById("button-new-account");
 const buttonNewTransaction = document.getElementById("button-new-transaction");
 
 const input_initial_date = document.getElementById('initial_date')
@@ -27,12 +26,19 @@ function clearInnerHTML(elementName) {
 
 function handleErrors(response) {
   if (!response.ok) {
+    console.log('Deu ruim');
     response.json()
+      .then(data => alert(data.message))
       .then(data => {
         throw Error(data.message)
       })
+
   }
   return response;
+}
+
+function getClassPositiveNegative(value) {
+  return (value >= 0) ? 'positive' : 'negative'
 }
 
 function setTransactionsToTable(transactions) {
@@ -41,34 +47,43 @@ function setTransactionsToTable(transactions) {
   clearInnerHTML("table-transactions");
 
   transactions.forEach(transaction => {
-    const first_cell = document.createElement('th');
+    const col_date = document.createElement('th');
     const row = table_transactions.insertRow();
+    const amount = parseFloat(transaction.value);
+    // const date = new Date(transaction.date + 'GMT-0300');
 
-    row.appendChild(first_cell);
-    const cell2 = row.insertCell(1);
-    const cell3 = row.insertCell(2);
-    const cell4 = row.insertCell(3);
+    accumulated += amount;
 
-    first_cell.scope = "row";
+    row.appendChild(col_date);
+    const col_description = row.insertCell(1);
+    const col_amount = row.insertCell(2);
+    const col_accumulated = row.insertCell(3);
+
+    col_date.scope = "row";
+    col_date.classList.add('date')
+
+    col_amount.classList.add('amount')
+    col_amount.classList.add('bold')
+    col_amount.classList.add(getClassPositiveNegative(amount))
+
+    col_accumulated.classList.add('amount')
+    col_accumulated.classList.add(getClassPositiveNegative(accumulated))
+
     row.classList.add('table-item-link');
     row.setAttribute('data-toggle', 'modal');
-    row.setAttribute('data-target',
-      '#modal-dashboard');
+    row.setAttribute('data-target', '#modal-dashboard');
     row.setAttribute('data-href', transaction.url);
     row.setAttribute('data-modal-title', 'Transaction');
     row.setAttribute('data-transaction-id', transaction.id);
 
-    const amount = parseFloat(transaction.value);
-    accumulated += amount;
-
-    // Add some text to the new cells:
-    first_cell.innerHTML = transaction.date;
-    cell2.innerHTML = transaction.description;
-    cell3.innerHTML = "R$ " + amount.toFixed(2);
-    cell4.innerHTML = "R$ " + accumulated.toFixed(2);
+    // col_date.innerHTML = date;
+    col_date.innerHTML = transaction.date;
+    col_description.innerHTML = transaction.description;
+    col_amount.innerHTML = "R$ " + amount.toFixed(2);
+    col_accumulated.innerHTML = "R$ " + accumulated.toFixed(2);
   });
 
-  setOnClickTableItemLink(onClickNew);
+  setOnClickEvent("table-item-link", onClickNew);
 }
 
 function setAccountsToTable(accounts) {
@@ -129,7 +144,6 @@ function onClickClear(e) {
 
 addListener(buttonClear, 'click', () => onClickClear(buttonClear));
 addListener(buttonFilter, 'click', () => onClickFilter(buttonFilter));
-// addListener(buttonNewAccount, 'click', () => onClickNew(buttonNewAccount));
 addListener(buttonNewTransaction, 'click', () => onClickNew(buttonNewTransaction));
 
 onClickFilter(buttonFilter.target)
