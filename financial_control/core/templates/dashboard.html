@@ -8,7 +8,7 @@
 {% include 'includes/bootstrap_modal.html' with modal_id='modal-dashboard' %}
 
 <!-- Filter -->
-<div class="row">
+<div class="row" id="filter">
   <div class="form-group">
     <label for="initial_date">Initial date:</label>
     <input type="date" name="initial_date" class="form-control" required="" id="initial_date" value="2020-01-01"
@@ -20,7 +20,6 @@
   </div>
   <div style="display: flex; align-items: center; justify-content: center;">
     <button type="button" class="btn btn-primary" id="button-filter">Filter</button>
-    <button type="button" class="btn btn-warning" id="button-clear">Clear</button>
   </div>
 </div>
 

@@ -21,8 +21,22 @@ function setOnClickEvent(class_name, on_click_event) {
   }
 }
 
+function handleErrors(response) {
+  if (!response.ok) {
+    console.log('Deu ruim');
+    response.json()
+      .then(data => alert(data.message))
+      .then(data => {
+        throw Error(data.message)
+      })
+
+  }
+  return response;
+}
+
 
 export {
   addListener,
-  setOnClickEvent
+  setOnClickEvent,
+  handleErrors
 }

@@ -35,7 +35,6 @@ urlpatterns = [
     path('transactions/', views.transaction_list, name='transaction_list'),
     re_path('transactions/new/$', views.transaction_new, name='transaction_new'),
     path('transactions/<int:pk>', views.transaction_form, name='transaction_form'),
-    #     re_path('transactions/<int:pk>/$', views.transaction_form, name='transaction_form'),
-    path('transactions/<int:pk>/delete', views.transaction_delete,
-         name='transaction_delete'),
+    path('transactions/<int:pk>/delete',
+         views.transaction_delete, name='transaction_delete'),
 ]
