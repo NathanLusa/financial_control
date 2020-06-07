@@ -1,13 +1,14 @@
 import calendar
 import sys
 import json
+import decimal
 from datetime import date, timedelta
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
 from django.urls import reverse
 
 from .common import utils, exceptions
-from .models import Account, Category, Transaction
+from .models import Account, Category, Transaction, MonthBalance
 
 
 def get_parameters_account_statments(request):
@@ -60,11 +61,42 @@ def get_accounts_json(accounts):
         item = {
             'id': account.id,
             'description': account.description,
-            'value': 0.0,
+            'value': decimal.Decimal(0.0),
         }
         accounts_json.append(item)
 
     return accounts_json
+
+
+def get_month_balance_json(month_balances, transactions):
+    month_balances_json = []
+    prev_amount = decimal.Decimal(0)
+
+    for month in month_balances:
+        income_value = decimal.Decimal(0)
+        expense_value = decimal.Decimal(0)
+        first_day = utils.first_day_month(month.date)
+
+        t_list = transactions.filter(date__gte=first_day, date__lte=month.date)
+        for transaction in t_list:
+            if transaction.value >= 0:
+                income_value += transaction.value
+            else:
+                expense_value += transaction.value
+
+        prev_amount += month.amount
+        item = {
+            'id': month.id,
+            'account': month.account.description,
+            'date': month.date,
+            'income_value': income_value,
+            'expense_value': expense_value,
+            'amount': month.amount,
+            'accumulated': prev_amount
+        }
+        month_balances_json.append(item)
+
+    return month_balances_json
 
 
 def accounts_statment(request):
@@ -78,11 +110,17 @@ def accounts_statment(request):
             date__gte=initial_date, date__lte=finish_date).order_by('date', '-value')
         transactions_json = get_transactions_json(transactions)
 
+        month_balances = MonthBalance.objects.filter(
+            date__gte=initial_date, date__lte=finish_date).order_by('date')
+        month_balances_json = get_month_balance_json(
+            month_balances, transactions)
+
         data = {
             'initial_date': initial_date,
             'finish_date': finish_date,
             'accounts': accounts_json,
             'transactions': transactions_json,
+            'month_balances': month_balances_json
         }
 
         return JsonResponse(data)

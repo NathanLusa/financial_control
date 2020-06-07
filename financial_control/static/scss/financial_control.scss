@@ -182,15 +182,18 @@ body {
 
 .table-item-link {
   cursor: pointer;
+}
 
-  .date {
+th,
+td {
+  &.date {
     width: 7rem;
   }
 
-  .amount {
-    $table-item-link-amount: 7.5rem;
-    min-width: $table-item-link-amount;
-    width: $table-item-link-amount;
+  &.amount {
+    $table-item-amount: 7.7rem;
+    min-width: $table-item-amount;
+    width: $table-item-amount;
 
     &.positive {
       color: green;
@@ -199,7 +202,6 @@ body {
     &.negative {
       color: red;
     }
-
   }
 }
 

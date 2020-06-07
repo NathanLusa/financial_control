@@ -53,7 +53,7 @@ class Category(BaseModel):
 
 
 class Transaction(BaseModel):
-    value = models.DecimalField(max_digits=15, decimal_places=2)
+    value = models.DecimalField(max_digits=15, decimal_places=2, default=0.0)
     date = models.DateField()
     description = models.CharField(max_length=100, null=True, blank=True)
     account = models.ForeignKey(
@@ -65,9 +65,14 @@ class Transaction(BaseModel):
         return '{} - {}'.format(self.description, self.date)
 
 
-class MounthBalance(BaseModel):
-    date = models.DateField()
-    amount = models.DecimalField(max_digits=15, decimal_places=2)
+class MonthBalance(BaseModel):
+    account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, null=False, related_name='month_balances')
+    date = models.DateField(unique=True)
+    amount = models.DecimalField(max_digits=15, decimal_places=2, default=0.0)
+
+    class Meta:
+        unique_together = ('account', 'date')
 
     def __str__(self):
         return f'{self.date} - {self.amount}'
