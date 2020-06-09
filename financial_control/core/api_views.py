@@ -106,10 +106,12 @@ def accounts_statment(request):
         accounts = Account.objects.all()
         accounts_json = get_accounts_json(accounts)
 
+        # transactions = Transaction.objects.all().order_by('date', '-value')
         transactions = Transaction.objects.filter(
             date__gte=initial_date, date__lte=finish_date).order_by('date', '-value')
         transactions_json = get_transactions_json(transactions)
 
+        # month_balances = MonthBalance.objects.all().order_by('date')
         month_balances = MonthBalance.objects.filter(
             date__gte=initial_date, date__lte=finish_date).order_by('date')
         month_balances_json = get_month_balance_json(

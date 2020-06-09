@@ -1,14 +1,38 @@
+import decimal
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from .forms import AccountForm, CategoryForm, TransactionForm
-from .models import Account, Category, Transaction
+from .models import Account, Category, Transaction, MonthBalance
 
+from .common import utils
 from .common.choices import NoYesChoises
 
 
 def index(request):
+    return redirect('dashboard')
+
+
+def process_balance(request):
+    month_balances = MonthBalance.objects.all()
+    for month_balance in month_balances:
+        month_balance.delete()
+
+    transactions = Transaction.objects.all().order_by('-date')
+    for transaction in transactions:
+        last_day = utils.last_day_month(transaction.date)
+
+        month_balance = MonthBalance.objects.filter(
+            date=last_day, account=transaction.account).first()
+        if not month_balance:
+            month_balance = MonthBalance(
+                account=transaction.account, date=last_day)
+
+        month_balance.amount = decimal.Decimal(
+            month_balance.amount) + transaction.value
+        month_balance.save()
+
     return redirect('dashboard')
 
 

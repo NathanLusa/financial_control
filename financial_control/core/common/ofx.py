@@ -22,15 +22,22 @@ def write_in_file(file, transaction):
         "value": str(transaction.amount),
         "date": str(transaction.date)[:10],
         "description": transaction.memo if len(transaction.memo) > 100 else transaction.memo[:100],
-        "observation": "",
+        "observation": transaction.memo if len(transaction.memo) > 200 else transaction.memo[:200],
         "account": 1,
-        "category": 18
+        "category": 1
     }
     file.writelines(json.dumps(to_write) + ',\n')
 
 
-path = 'financial_control/core/static/'
-files = ['202001.ofx', '202002.ofx', '202003.ofx', '202004.ofx']
+# path = 'financial_control/core/static/'
+path = 'financial_control/static/ofx/'
+files = ['2020/202001.ofx', '2020/202002.ofx',
+         '2020/202003.ofx', '2020/202004.ofx', '2020/202005.ofx']
+
+
+for year in range(2015, 2020):
+    for month in range(1, 13):
+        files.append(f'{year}/{year}{month:02}.ofx')
 
 file = open(path + 'extrato.json', "w")
 file.write('[\n')

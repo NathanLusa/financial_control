@@ -214,7 +214,18 @@ td del {
 }
 
 #filter {
-  display: flex;
+  display: block;
+
+  div {
+    display: flex;
+    justify-content: center;
+    margin-top: 2px;
+
+    button {
+      margin-left: 3px;
+    }
+  }
+
   // justify-content: center;
-  align-items: center;
+  // align-items: center;
 }

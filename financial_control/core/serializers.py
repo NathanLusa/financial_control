@@ -23,7 +23,10 @@ class BaseModelSerializer(serializers.ModelSerializer):
         if len(kwargs) > 0:
             instance = ModelClass._default_manager.filter(**kwargs).first()
 
-        if not instance:
+        if instance:
+            print(f'{instance.id} - {validated_data["description"]}')
+            self.update(instance, validated_data)
+        else:
             instance = ModelClass._default_manager.create(**validated_data)
 
         return instance
@@ -40,14 +43,14 @@ class CategorySerializer(BaseModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
-        create_fields_verify = ['description']
+        create_fields_verify = ['description', 'movement_type']
 
 
 class TransactionSerializer(BaseModelSerializer):
     class Meta:
         model = Transaction
         fields = '__all__'
-        create_fields_verify = ['description', 'date', 'value', 'account']
+        # create_fields_verify = ['description', 'date', 'value', 'account']
 
 
 class AccountDashboardSerializer(serializers.Serializer):

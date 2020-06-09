@@ -1,7 +1,9 @@
 import {
   addListener,
   setOnClickEvent,
-  handleErrors
+  handleErrors,
+  range,
+  dateToString
 } from './utils.js';
 
 
@@ -11,13 +13,18 @@ function setDashboardData(data) {
   setOnClickEvent("table-item-link", onClickNew);
 }
 
-function onClickFilter() {
+function onClickFilter(e) {
   const url = new URL('/api/accounts_statment', document.location)
 
+  const year = document.querySelector('#filter-year').querySelector('label.active').querySelector('input').getAttribute('id')
+  const month = document.querySelector('#filter-month').querySelector('label.active').querySelector('input').getAttribute('id')
+
+  const initial_date = new Date(year, month - 1, 1)
+  const finish_date = new Date(year, month, 0)
+
   url.search = new URLSearchParams({
-    initial_date: input_initial_date.value,
-    finish_date: input_finish_date.value,
-    // accounts: '1,2,3'
+    initial_date: dateToString(initial_date),
+    finish_date: dateToString(finish_date),
   })
 
   fetch(url)
@@ -114,17 +121,43 @@ function update(accounts, transactions, month_balances) {
   table_month_balances.innerHTML = MonthBalanceTable(month_balances)
 }
 
+function FilterButtons() {
+  const years = range(6, 2015)
+  const months = range(12, 1)
+
+  const create_div = (id, items, item_checked, pad) => `
+    <div class="btn-group btn-group-toggle" data-toggle="buttons" id="${id}">
+      ${items.map(item => create_label(item, item_checked, pad)).join('')}
+    </div>`;
+
+  const create_label = (item, item_checked, pad) => `
+    <label class="btn btn-primary ${item == item_checked ? 'active' : ''}">
+      <input type="radio" name="options" id="${item.toString().padStart(pad, '0')}"
+        ${item == item_checked ? 'checked' : ''}> ${item.toString().padStart(pad, '0')}
+    </label>`;
+
+  const date_now = new Date();
+  const year_now = date_now.getFullYear();
+  const month_now = date_now.getMonth() + 1;
+
+  const filter_years = create_div('filter-year', years, year_now, 4);
+  const filter_months = create_div('filter-month', months, month_now, 2);
+
+  div_filter.innerHTML = filter_years + filter_months;
+}
+
 const modal_dashboard = document.getElementById("modal-dashboard")
 const modal_title = modal_dashboard.querySelector(".modal-title")
 const modal_body = modal_dashboard.querySelector(".modal-body")
 
-const buttonFilter = document.getElementById("button-filter");
+const div_filter = document.getElementById('filter');
+FilterButtons()
+
 const buttonNewTransaction = document.getElementById("button-new-transaction");
 
-const input_initial_date = document.getElementById('initial_date')
-const input_finish_date = document.getElementById('finish_date')
+const buttons = document.querySelector('#filter').querySelectorAll('input');
+buttons.forEach(button => addListener(button, 'click', () => onClickFilter(button)));
 
-addListener(buttonFilter, 'click', () => onClickFilter(buttonFilter));
 addListener(buttonNewTransaction, 'click', () => onClickNew(buttonNewTransaction));
 
-onClickFilter(buttonFilter.target);
+onClickFilter();
