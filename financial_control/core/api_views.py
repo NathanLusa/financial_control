@@ -15,6 +15,7 @@ def get_parameters_account_statments(request):
     # param_accounts = request.GET.get('accounts')
     param_initial_date = request.GET.get('initial_date')
     param_finish_date = request.GET.get('finish_date')
+    param_accounts = request.GET.get('accounts')
 
     if not param_initial_date:
         raise exceptions.ParamError(
@@ -30,7 +31,9 @@ def get_parameters_account_statments(request):
     if initial_date > finish_date:
         finish_date = utils.last_day_month(initial_date)
 
-    return initial_date, finish_date
+    account_list = [0] if param_accounts == '' else param_accounts.split(',')
+
+    return initial_date, finish_date, account_list
 
 
 def get_transactions_json(transactions):
@@ -68,30 +71,47 @@ def get_accounts_json(accounts):
     return accounts_json
 
 
-def get_month_balance_json(month_balances, transactions):
+def get_month_balance_json(month_balances, transactions, accounts):
     month_balances_json = []
-    prev_amount = decimal.Decimal(0)
 
-    for month in month_balances:
+    for account in accounts:
+        prev_amount = decimal.Decimal(0)
+
+        months = month_balances.filter(account=account.id)
+        for month in months:
+            prev_amount += month.amount
+
         income_value = decimal.Decimal(0)
         expense_value = decimal.Decimal(0)
-        first_day = utils.first_day_month(month.date)
+        min_date_transaction = date.today()
 
-        t_list = transactions.filter(date__gte=first_day, date__lte=month.date)
-        for transaction in t_list:
+        transaction_list = transactions.filter(account=account.id)
+        min_transaction = transaction_list.order_by('date').first()
+        if min_transaction:
+            min_date_transaction = utils.first_day_month(
+                min_transaction.date) - timedelta(1)
+
+        for transaction in transaction_list:
             if transaction.value >= 0:
                 income_value += transaction.value
             else:
                 expense_value += transaction.value
 
-        prev_amount += month.amount
+        amount = income_value + expense_value
+        prev_amount += amount
+
+        month = months.order_by('date').last()
+        if not month:
+            month = MonthBalance(id=0, account=account,
+                                 date=min_date_transaction)
+
         item = {
             'id': month.id,
             'account': month.account.description,
             'date': month.date,
             'income_value': income_value,
             'expense_value': expense_value,
-            'amount': month.amount,
+            'amount': amount,
             'accumulated': prev_amount
         }
         month_balances_json.append(item)
@@ -101,21 +121,20 @@ def get_month_balance_json(month_balances, transactions):
 
 def accounts_statment(request):
     try:
-        initial_date, finish_date = get_parameters_account_statments(request)
+        initial_date, finish_date, accounts_filter = get_parameters_account_statments(
+            request)
 
-        accounts = Account.objects.all()
+        accounts = Account.objects.filter(pk__in=accounts_filter)
         accounts_json = get_accounts_json(accounts)
 
-        # transactions = Transaction.objects.all().order_by('date', '-value')
-        transactions = Transaction.objects.filter(
-            date__gte=initial_date, date__lte=finish_date).order_by('date', '-value')
+        transactions = Transaction.objects.filter(account__in=accounts_filter,
+                                                  date__gte=initial_date, date__lte=finish_date).order_by('date', '-value')
         transactions_json = get_transactions_json(transactions)
 
-        # month_balances = MonthBalance.objects.all().order_by('date')
-        month_balances = MonthBalance.objects.filter(
-            date__gte=initial_date, date__lte=finish_date).order_by('date')
+        month_balances = MonthBalance.objects.filter(account__in=accounts_filter,
+                                                     date__lt=initial_date).order_by('date')
         month_balances_json = get_month_balance_json(
-            month_balances, transactions)
+            month_balances, transactions, accounts)
 
         data = {
             'initial_date': initial_date,

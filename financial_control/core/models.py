@@ -68,7 +68,7 @@ class Transaction(BaseModel):
 class MonthBalance(BaseModel):
     account = models.ForeignKey(
         Account, on_delete=models.CASCADE, null=False, related_name='month_balances')
-    date = models.DateField(unique=True)
+    date = models.DateField()
     amount = models.DecimalField(max_digits=15, decimal_places=2, default=0.0)
 
     class Meta:

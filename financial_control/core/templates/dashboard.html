@@ -9,26 +9,37 @@
 
 <!-- Filter -->
 <!-- <a class="btn btn-primary" href="{% url 'process_balance' %}">Process balance</a> -->
-<div id="filter">
+<div class="container">
+  <div id="filter">
+  </div>
 </div>
-
 
 <!-- Tables -->
 <div class="row">
-  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+  <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
     <div class="card shadow p-3 mb-5 bg-white rounded">
       <div class="card-header">
         <h4>Accounts</h4>
       </div>
       <div class="card-body">
         <table class="table" id="table-accounts">
-
+          {% for account in accounts %}
+          <tr>
+            <th>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="{{account.id}}" checked>
+                <label class="custom-control-label" for="{{account.id}}">{{account.description}}</label>
+              </div>
+            </th>
+            <td>{{account.value}}</td>
+          </tr>
+          {% endfor %}
         </table>
       </div>
     </div>
   </div>
 
-  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+  <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
     <div class="card shadow p-3 mb-5 bg-white rounded">
       <div class="card-header">
         <h4>Month Balance</h4>
@@ -40,8 +51,11 @@
       </div>
     </div>
   </div>
+</div>
 
-  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-8">
+<div class="row">
+  <!-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-8"> -->
+  <div class="col">
     <div class="card shadow p-3 mb-5 bg-white rounded">
       <div class="card-header">
         <h4>Transactions</h4>

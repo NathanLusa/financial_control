@@ -3,28 +3,94 @@ import {
   setOnClickEvent,
   handleErrors,
   range,
-  dateToString
+  dateToString,
+  getCookie,
+  setCookie
 } from './utils.js';
 
+class AccountStatment {
+
+  constructor(selected_month, selected_year, selected_accounts, setCookie) {
+    this.monthValue = selected_month
+    this.yearValue = selected_year
+    this.accountsValue = selected_accounts
+    this.setCookie = setCookie
+  }
+
+  get initial_date() {
+    return new Date(this.yearValue, this.monthValue - 1, 1)
+  }
+
+  get finish_date() {
+    return new Date(this.yearValue, this.monthValue, 0)
+  }
+
+  get year() {
+    return this.yearValue
+  }
+
+  set year(year) {
+    this.yearValue = year
+    this.setCookie('year', this.yearValue, 1)
+  }
+
+  get month() {
+    return this.monthValue
+  }
+
+  set month(month) {
+    this.monthValue = month
+    this.setCookie('month', this.monthValue, 1)
+  }
+
+  get accounts() {
+    return this.accountsValue
+  }
+
+  set accounts(accounts) {
+    this.accountsValue = accounts
+    this.setCookie('accounts', this.accountsValue, 1)
+  }
+}
 
 function setDashboardData(data) {
-  update(data.accounts, data.transactions, data.month_balances)
+  update(data.transactions, data.month_balances)
 
   setOnClickEvent("table-item-link", onClickNew);
 }
 
 function onClickFilter(e) {
+  account_statment.year = document.querySelector('#filter-year').querySelector('label.active').querySelector('input').getAttribute('id')
+  account_statment.month = document.querySelector('#filter-month').querySelector('label.active').querySelector('input').getAttribute('id')
+
+  filter(account_statment)
+}
+
+function onClickFilterDropdown(e) {
+  if (e) {
+    const filter = e.parentElement.getAttribute('aria-labelledby')
+    account_statment.year = filter == 'filter-year' ? e.getAttribute('id') : account_statment.year;
+    account_statment.month = filter == 'filter-month' ? e.getAttribute('id') : account_statment.month;
+  }
+
+  document.querySelector('#filter').querySelector('button#filter-year').innerHTML = account_statment.year;
+  document.querySelector('#filter').querySelector('button#filter-month').innerHTML = account_statment.month;
+
+  filter(account_statment)
+}
+
+function onClickFilterCheckbox(e) {
+  account_statment.accounts = getSelectedAccounts()
+  filter(account_statment)
+}
+
+function filter(account_statment) {
   const url = new URL('/api/accounts_statment', document.location)
 
-  const year = document.querySelector('#filter-year').querySelector('label.active').querySelector('input').getAttribute('id')
-  const month = document.querySelector('#filter-month').querySelector('label.active').querySelector('input').getAttribute('id')
-
-  const initial_date = new Date(year, month - 1, 1)
-  const finish_date = new Date(year, month, 0)
-
   url.search = new URLSearchParams({
-    initial_date: dateToString(initial_date),
-    finish_date: dateToString(finish_date),
+    accounts: account_statment.accounts,
+    initial_date: dateToString(account_statment.initial_date),
+    finish_date: dateToString(account_statment.finish_date),
   })
 
   fetch(url)
@@ -50,21 +116,27 @@ function amount_class(value) {
   return value >= 0 ? 'positive' : 'negative'
 }
 
-function AccountTable(accounts) {
-  return accounts.map(account => AccountItem(account)).join('');
+function setAccountsSelected(accounts) {
+  accounts_input.forEach(input => {
+    input.checked = accounts.includes(input.getAttribute('id'))
+  });
 }
 
-function AccountItem(account) {
-  return `<tr>
-            <th scope="row">${account.description}</th>
-            <td>${parseFloat(account.value).toFixed(2)}</td>
-          </tr>`
+function getSelectedAccounts() {
+  let accounts = []
+
+  accounts_input.forEach(input => {
+    if (input.checked) {
+      accounts.push(input.getAttribute('id'));
+    }
+  });
+
+  return accounts
 }
 
 function MonthBalanceTable(month_balances) {
   const head = `<thead>
                   <th>Account</th>
-                  <th>Date</th>
                   <th>Income</th>
                   <th>Expense</th>
                   <th>Balance</th>
@@ -82,7 +154,6 @@ function MonthBalanceItem(month_balance) {
 
   return `<tr>
             <th scope="row">${month_balance.account}</th>
-            <td>${month_balance.date}</td>
             <td class="amount ${amount_class(income)}">R$ ${income.toFixed(2)}</td>
             <td class="amount ${amount_class(expense)}">R$ ${expense.toFixed(2)}</td>
             <td class="amount ${amount_class(amount)}">R$ ${amount.toFixed(2)}</td>
@@ -111,17 +182,15 @@ function TransactionItem(transaction, f_accumulate) {
   `
 }
 
-function update(accounts, transactions, month_balances) {
-  const table_accounts = document.getElementById("table-accounts")
+function update(transactions, month_balances) {
   const table_transactions = document.getElementById("table-transactions");
   const table_month_balances = document.getElementById("table-month-balances");
 
-  table_accounts.innerHTML = AccountTable(accounts)
   table_transactions.innerHTML = TransactionTable(transactions)
   table_month_balances.innerHTML = MonthBalanceTable(month_balances)
 }
 
-function FilterButtons() {
+function Filter() {
   const years = range(6, 2015)
   const months = range(12, 1)
 
@@ -136,28 +205,82 @@ function FilterButtons() {
         ${item == item_checked ? 'checked' : ''}> ${item.toString().padStart(pad, '0')}
     </label>`;
 
-  const date_now = new Date();
-  const year_now = date_now.getFullYear();
-  const month_now = date_now.getMonth() + 1;
+  const filter_years = create_div('filter-year', years, account_statment.year, 4);
+  const filter_months = create_div('filter-month', months, account_statment.month, 2);
+  const filter_description = `
+    <div class="row">
+      <input class="form-control type="search" placeholder="Search" aria-label="Search">
+      <bu5retton class="btn btn-outline-primary">Search</button>
+    </div>`
 
-  const filter_years = create_div('filter-year', years, year_now, 4);
-  const filter_months = create_div('filter-month', months, month_now, 2);
-
-  div_filter.innerHTML = filter_years + filter_months;
+  div_filter.innerHTML = filter_years + filter_months + filter_description;
 }
+
+function FilterButtonsDropdown() {
+  const years = range(6, 2015)
+  const months = range(12, 1)
+
+  const create_div = (id, items, label, pad) => `
+    <div class="dropdown">
+      <button class="btn btn-primary dropdown-toggle" type="button" id="${id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        ${label}
+      </button>
+      <div class="dropdown-menu" aria-labelledby="${id}">
+        ${items.map(item => create_label(item, pad)).join('')}
+      </div>
+    </div>`;
+
+  const create_label = (item, pad) => `<a class="dropdown-item" href="#" id="${item.toString().padStart(pad, '0')}">${item.toString().padStart(pad, '0')}</a>`;
+
+  const filter_years = create_div('filter-year', years, 'Year', 4);
+  const filter_months = create_div('filter-month', months, 'Month', 2);
+
+  div_filter.innerHTML += filter_years + filter_months;
+}
+
+function get_account_statment_main() {
+  const date_now = new Date();
+  var selected_year = date_now.getFullYear();
+  var selected_month = date_now.getMonth();
+  var selected_accounts = getSelectedAccounts();
+
+  const cookie_selected_year = getCookie('year')
+  const cookie_selected_month = getCookie('month')
+  const cookie_selected_accounts = getCookie('accounts')
+
+  if (cookie_selected_year != "") {
+    selected_year = cookie_selected_year
+  };
+  if (cookie_selected_month != "") {
+    selected_month = cookie_selected_month
+  };
+  if (cookie_selected_accounts != "") {
+    selected_accounts = cookie_selected_accounts
+  };
+
+  return new AccountStatment(selected_month, selected_year, selected_accounts, setCookie)
+}
+
+const accounts_input = document.querySelector('#table-accounts').querySelectorAll('input');
+accounts_input.forEach(input => addListener(input, 'click', () => onClickFilterCheckbox(input)));
+
+const account_statment = get_account_statment_main();
+setAccountsSelected(account_statment.accounts)
 
 const modal_dashboard = document.getElementById("modal-dashboard")
 const modal_title = modal_dashboard.querySelector(".modal-title")
 const modal_body = modal_dashboard.querySelector(".modal-body")
 
-const div_filter = document.getElementById('filter');
-FilterButtons()
-
 const buttonNewTransaction = document.getElementById("button-new-transaction");
+addListener(buttonNewTransaction, 'click', () => onClickNew(buttonNewTransaction));
 
+const div_filter = document.getElementById('filter');
+Filter()
 const buttons = document.querySelector('#filter').querySelectorAll('input');
 buttons.forEach(button => addListener(button, 'click', () => onClickFilter(button)));
 
-addListener(buttonNewTransaction, 'click', () => onClickNew(buttonNewTransaction));
+// FilterButtonsDropdown()
+// const buttons2 = document.querySelector('#filter').querySelectorAll('a');
+// buttons2.forEach(button => addListener(button, 'click', () => onClickFilterDropdown(button)));
 
-onClickFilter();
+filter(account_statment);

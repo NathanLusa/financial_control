@@ -7,7 +7,7 @@ from .forms import AccountForm, CategoryForm, TransactionForm
 from .models import Account, Category, Transaction, MonthBalance
 
 from .common import utils
-from .common.choices import NoYesChoises
+from .common.choices import NoYesChoises, StatusChoises
 
 
 def index(request):
@@ -37,7 +37,8 @@ def process_balance(request):
 
 
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    accounts = Account.objects.filter(status=StatusChoises.ACTIVE)
+    return render(request, 'dashboard.html', {'accounts': accounts})
 
 
 def account_list(request):
