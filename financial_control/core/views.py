@@ -38,7 +38,9 @@ def process_balance(request):
 
 def dashboard(request):
     accounts = Account.objects.filter(status=StatusChoises.ACTIVE)
-    return render(request, 'dashboard.html', {'accounts': accounts})
+    years = range(2015, 2021)
+    months = range(1, 13)
+    return render(request, 'dashboard.html', {'accounts': accounts, 'years': years, 'months': months})
 
 
 def account_list(request):

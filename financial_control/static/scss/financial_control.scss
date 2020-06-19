@@ -182,6 +182,10 @@ body {
 
 .table-item-link {
   cursor: pointer;
+
+  &:hover {
+    background-color: #eee;
+  }
 }
 
 th,
@@ -205,16 +209,12 @@ td {
   }
 }
 
-.table-item-link:hover {
-  background-color: #eee;
-}
-
 td del {
   color: gray;
 }
 
 #filter {
-  display: block;
+  display: flex;
 
   div {
     display: flex;

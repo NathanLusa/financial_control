@@ -16,6 +16,7 @@ def get_parameters_account_statments(request):
     param_initial_date = request.GET.get('initial_date')
     param_finish_date = request.GET.get('finish_date')
     param_accounts = request.GET.get('accounts')
+    param_description = request.GET.get('description')
 
     if not param_initial_date:
         raise exceptions.ParamError(
@@ -33,7 +34,7 @@ def get_parameters_account_statments(request):
 
     account_list = [0] if param_accounts == '' else param_accounts.split(',')
 
-    return initial_date, finish_date, account_list
+    return initial_date, finish_date, account_list, param_description
 
 
 def get_transactions_json(transactions):
@@ -121,14 +122,14 @@ def get_month_balance_json(month_balances, transactions, accounts):
 
 def accounts_statment(request):
     try:
-        initial_date, finish_date, accounts_filter = get_parameters_account_statments(
+        initial_date, finish_date, accounts_filter, description = get_parameters_account_statments(
             request)
 
         accounts = Account.objects.filter(pk__in=accounts_filter)
         accounts_json = get_accounts_json(accounts)
 
         transactions = Transaction.objects.filter(account__in=accounts_filter,
-                                                  date__gte=initial_date, date__lte=finish_date).order_by('date', '-value')
+                                                  date__gte=initial_date, date__lte=finish_date, description__icontains=description).order_by('date', '-value')
         transactions_json = get_transactions_json(transactions)
 
         month_balances = MonthBalance.objects.filter(account__in=accounts_filter,
