@@ -15,6 +15,7 @@
 
   {% compress css %}
   <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/financial_control.scss' %}" />
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/datepicker.scss' %}" />
   {% endcompress %}
 
   <script src="https://kit.fontawesome.com/417f08d9c2.js" crossorigin="anonymous"></script>
@@ -49,13 +50,53 @@
       {% include 'includes/components/sidebar/sidebar_item.html' with url='transaction_list' icon='fa-money-bill-alt' description='Transactions' %}
     </ul>
 
-    <div class="container-fluid content">
-      {% block main %}
-      {% endblock %}
+    <!-- <div class="container-fluid content"> -->
+
+    <div class="datepicker">
+      <input type="text" class="form-control" id="datepicker">
+
+      <div class="calendar">
+        <table>
+          <thead>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>2</td>
+              <td>3</td>
+              <td>4</td>
+              <td>5</td>
+              <td>6</td>
+              <td>7</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
+
+    <!-- <section class="main">
+        <div class="user">
+          <img src="img/avatar.png">
+          <h5>Sheldon Cooper <small>Chief Theory Officer</small></h5>
+          <ul>
+            <li><a href="index.html">Follow</a></li>
+            <li><a href="index.html">View Profile</a></li>
+            <li><a href="index.html">Direct Message</a></li>
+            <li class="sep">Joined: March 9, 2012</li>
+          </ul>
+        </div>
+      </section> -->
+
+
+    {% comment %} {% block main %}
+    {% endblock %} {% endcomment %}
+
+    <!-- </div> -->
   </div>
 
   <script type="module" src="{% static 'js/financial_control.js' %}"></script>
+  <script type="module" src="{% static 'js/datepicker.js' %}"></script>
 
   {% block script %}
   {% endblock %}
