@@ -223,8 +223,8 @@ function get_account_statment_main() {
 }
 
 function setEvents() {
-  div_filter_year.querySelectorAll('input').forEach(button => addListener(button, 'click', () => onClickFilter(button)));
-  div_filter_month.querySelectorAll('input').forEach(button => addListener(button, 'click', () => onClickFilter(button)));
+  // div_filter_year.querySelectorAll('input').forEach(button => addListener(button, 'click', () => onClickFilter(button)));
+  // div_filter_month.querySelectorAll('input').forEach(button => addListener(button, 'click', () => onClickFilter(button)));
   accounts_input.forEach(input => addListener(input, 'click', () => onClickFilter(input)));
 
   const buttonNewTransaction = document.getElementById("button-new-transaction");
@@ -259,8 +259,12 @@ const div_filter_month = document.querySelector('#filter-month')
 
 window.onload = () => {
   setEvents();
-  setDefaultFilter();
+  // setDefaultFilter();
   setAccountsSelected(account_statment.accounts)
+
+  flatpickr('#calendar', {
+    mode: "range"
+  })
 
   filter(account_statment);
 }
