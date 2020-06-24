@@ -12,56 +12,15 @@
 
 <!-- Filter -->
 <div class="container-fluid" id="filter">
-  <div>
-    <input type="text" id="calendar">
+  <div class="row">
+    <input type="text" id="calendar" style="width: 19rem;">
   </div>
-  <!-- Years -->
-  <!-- <div class="btn-group btn-group-toggle" data-toggle="buttons" id="filter-year">
-    {% for year in years %}
-    <label class="btn btn-primary">
-      <input type="radio" name="options" autocomplete="off" id="year-{{ year }}" data-year="{{ year }}">{{ year }}
-    </label>
-    {% endfor %}
-  </div> -->
-
-  <!-- Months -->
-  <!-- <div class="btn-group btn-group-toggle" data-toggle="buttons" id="filter-month">
-    {% for month in months %}
-    <label class="btn btn-primary">
-      <input type="radio" name="options" autocomplete="off" id="month-{{ month|lpadzero:'02'}}"
-        data-month="{{ month|lpadzero:'02' }}">{{ month|lpadzero:"02" }}
-    </label>
-    {% endfor %}
-  </div> -->
 
   <!-- Description -->
-  <div>
-    <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="filter-description">
+  <div class="row">
+    <input type="search" placeholder="Search" aria-label="Search" id="filter-description">
     <button class="btn btn-outline-primary" id="filter-description-button">Search</button>
   </div>
-
-  <!-- Years Dropdown -->
-  <!-- <div class="dropdown">
-    <button class="btn btn-primary dropdown-toggle" type="button" id="filter-year-dropdown" data-toggle="dropdown"
-      aria-haspopup="true" aria-expanded="false">Years</button>
-    <div class="dropdown-menu" aria-labelledby="filter-year-dropdown">
-      {% for year in years %}
-      <a class="dropdown-item" href="#" id="year-dropdown-{{ year|lpadzero:'2' }}">{{ year|lpadzero:'2' }}</a>
-      {% endfor %}
-    </div>
-  </div> -->
-
-  <!-- Months Dropdow -->
-  <!-- <div class="dropdown">
-    <button class="btn btn-primary dropdown-toggle" type="button" id="filter-month-dropdown" data-toggle="dropdown"
-      aria-haspopup="true" aria-expanded="false">Months</button>
-    <div class="dropdown-menu" aria-labelledby="filter-month-dropdown">
-      {% for month in months %}
-      <a class="dropdown-item" href="#" id="month-dropdown-{{ month|lpadzero:'2' }}">{{ month|lpadzero:'2' }}</a>
-      {% endfor %}
-    </div>
-  </div> -->
-
 
 </div>
 

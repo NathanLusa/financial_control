@@ -14,8 +14,8 @@
 *.sh
 
 # static
-# /financial_control/static
-*.ofx
+/financial_control/static
+# *.ofx
 # *.json
 
 #node

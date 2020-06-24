@@ -1,3 +1,4 @@
+import flatpickr from "flatpickr";
 import {
   addListener,
   setOnClickEvent,
@@ -262,9 +263,9 @@ window.onload = () => {
   // setDefaultFilter();
   setAccountsSelected(account_statment.accounts)
 
-  // flatpickr('#calendar', {
-  //   mode: "range"
-  // })
+  flatpickr('#calendar', {
+    mode: "range"
+  })
 
   filter(account_statment);
 }

@@ -98,6 +98,18 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _js_
 
 /***/ }),
 
+/***/ "./frontend/js/financial_control.js":
+/*!******************************************!*\
+  !*** ./frontend/js/financial_control.js ***!
+  \******************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils.js */ \"./frontend/js/utils.js\");\n\n\nfunction openDataHref(e) {\n  const data_href = e.getAttribute('data-href')\n\n  if (data_href) {\n    window.open(data_href, \"_self\")\n  }\n}\n\nObject(_utils_js__WEBPACK_IMPORTED_MODULE_0__[\"setOnClickEvent\"])(\"table-item-link\", openDataHref);\nObject(_utils_js__WEBPACK_IMPORTED_MODULE_0__[\"setOnClickEvent\"])(\"sidebar-item\", openDataHref);\n\n//# sourceURL=webpack:///./frontend/js/financial_control.js?");
+
+/***/ }),
+
 /***/ "./frontend/js/main.js":
 /*!*****************************!*\
   !*** ./frontend/js/main.js ***!
@@ -106,7 +118,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _js_
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ \"./node_modules/bootstrap/dist/js/bootstrap.js\");\n/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_eot__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.eot */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.eot\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.svg */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.svg\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_ttf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_woff__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.woff */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_woff2__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2 */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2\");\n/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./utils.js */ \"./frontend/js/utils.js\");\n\n\n\n\n\n\n\n\n\n\nwindow.onload = () => {\n  Object(_utils_js__WEBPACK_IMPORTED_MODULE_6__[\"setOnClickEvent\"])(\"table-item-link\", _utils_js__WEBPACK_IMPORTED_MODULE_6__[\"openDataHref\"]);\n  Object(_utils_js__WEBPACK_IMPORTED_MODULE_6__[\"setOnClickEvent\"])(\"sidebar-item\", _utils_js__WEBPACK_IMPORTED_MODULE_6__[\"openDataHref\"]);\n}\n\n//# sourceURL=webpack:///./frontend/js/main.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ \"./node_modules/bootstrap/dist/js/bootstrap.js\");\n/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_eot__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.eot */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.eot\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.svg */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.svg\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_ttf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_woff__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.woff */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_woff2__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2 */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2\");\n/* harmony import */ var _financial_control__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./financial_control */ \"./frontend/js/financial_control.js\");\n\n\n\n\n\n\n\n\n\n\n//# sourceURL=webpack:///./frontend/js/main.js?");
 
 /***/ }),
 
