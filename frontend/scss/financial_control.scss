@@ -1,3 +1,5 @@
+/*! financial_control.css */
+
 // @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
 
@@ -89,7 +91,7 @@ body {
   color: $sidebar-icon-color;
   font-size: 1.2rem;
 
-  svg {
+  i {
     font-size: 18px;
   }
 }
@@ -104,11 +106,11 @@ body {
     padding: 45px 0px 45px 0px;
   }
 
-  svg {
+  i {
     font-size: 50px;
   }
 
-  svg:hover {
+  i:hover {
     color: #eccb10;
   }
 }
@@ -133,7 +135,7 @@ body {
       text-decoration: none;
     }
 
-    svg {
+    i {
       color: #eccb10;
     }
   }
@@ -148,7 +150,7 @@ body {
     /* border: solid black; */
   }
 
-  svg {
+  i {
     color: $sidebar-icon-color;
     margin-right: 12px;
   }
@@ -168,7 +170,7 @@ body {
       color: #fff;
     }
 
-    svg {
+    i {
       color: #eccb10;
     }
   }

@@ -1,5 +1,7 @@
 import 'bootstrap';
-import '@fortawesome/fontawesome-free/js/fontawesome'
-import '@fortawesome/fontawesome-free/js/solid'
-import '@fortawesome/fontawesome-free/js/regular'
-import '@fortawesome/fontawesome-free/js/brands'
+
+import '@fortawesome/fontawesome-free/webfonts/fa-solid-900.eot'
+import '@fortawesome/fontawesome-free/webfonts/fa-solid-900.svg'
+import '@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf'
+import '@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff'
+import '@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2'
