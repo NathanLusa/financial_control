@@ -15,4 +15,7 @@
 
 # static
 *.ofx
-*.json
+# *.json
+
+#node
+/node_modules
