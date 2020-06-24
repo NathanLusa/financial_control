@@ -89,7 +89,7 @@ body {
   color: $sidebar-icon-color;
   font-size: 1.2rem;
 
-  i {
+  svg {
     font-size: 18px;
   }
 }
@@ -104,11 +104,11 @@ body {
     padding: 45px 0px 45px 0px;
   }
 
-  i {
+  svg {
     font-size: 50px;
   }
 
-  i:hover {
+  svg:hover {
     color: #eccb10;
   }
 }
@@ -133,7 +133,7 @@ body {
       text-decoration: none;
     }
 
-    i {
+    svg {
       color: #eccb10;
     }
   }
@@ -148,7 +148,7 @@ body {
     /* border: solid black; */
   }
 
-  i {
+  svg {
     color: $sidebar-icon-color;
     margin-right: 12px;
   }
@@ -168,7 +168,7 @@ body {
       color: #fff;
     }
 
-    i {
+    svg {
       color: #eccb10;
     }
   }
