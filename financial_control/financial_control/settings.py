@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     # 3rd party
     'rest_framework',
     'widget_tweaks',
-    'compressor',
 ]
 
 MIDDLEWARE = [
@@ -137,10 +136,4 @@ STATICFILES_DIRS = [
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    # other finders..
-    'compressor.finders.CompressorFinder',
 ]
-
-COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'django_libsass.SassCompiler'),
-)

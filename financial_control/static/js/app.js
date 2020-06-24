@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./frontend/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -106,7 +106,19 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _js_
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ \"./node_modules/bootstrap/dist/js/bootstrap.js\");\n/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_eot__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.eot */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.eot\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.svg */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.svg\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_ttf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_woff__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.woff */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_woff2__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2 */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2\");\n\n\n\n\n\n\n\n\n//# sourceURL=webpack:///./frontend/js/main.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ \"./node_modules/bootstrap/dist/js/bootstrap.js\");\n/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_eot__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.eot */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.eot\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.svg */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.svg\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_ttf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_woff__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.woff */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff\");\n/* harmony import */ var _fortawesome_fontawesome_free_webfonts_fa_solid_900_woff2__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2 */ \"./node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2\");\n/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./utils.js */ \"./frontend/js/utils.js\");\n\n\n\n\n\n\n\n\n\n\nwindow.onload = () => {\n  Object(_utils_js__WEBPACK_IMPORTED_MODULE_6__[\"setOnClickEvent\"])(\"table-item-link\", _utils_js__WEBPACK_IMPORTED_MODULE_6__[\"openDataHref\"]);\n  Object(_utils_js__WEBPACK_IMPORTED_MODULE_6__[\"setOnClickEvent\"])(\"sidebar-item\", _utils_js__WEBPACK_IMPORTED_MODULE_6__[\"openDataHref\"]);\n}\n\n//# sourceURL=webpack:///./frontend/js/main.js?");
+
+/***/ }),
+
+/***/ "./frontend/js/utils.js":
+/*!******************************!*\
+  !*** ./frontend/js/utils.js ***!
+  \******************************/
+/*! exports provided: addListener, setOnClickEvent, handleErrors, range, dateToString, setCookie, getCookie, openDataHref */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"addListener\", function() { return addListener; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"setOnClickEvent\", function() { return setOnClickEvent; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"handleErrors\", function() { return handleErrors; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"range\", function() { return range; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"dateToString\", function() { return dateToString; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"setCookie\", function() { return setCookie; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"getCookie\", function() { return getCookie; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"openDataHref\", function() { return openDataHref; });\nfunction addListener(element, eventName, handler) {\n  if (element.addEventListener) {\n    element.addEventListener(eventName, handler, false);\n  } else if (element.attachEvent) {\n    element.attachEvent('on' + eventName, handler);\n  } else {\n    element['on' + eventName] = handler;\n  }\n}\n\nfunction setOnClickEvent(class_name, on_click_event) {\n  const list = document.getElementsByClassName(class_name);\n\n  if (on_click_event) {\n    for (const key in list) {\n      if (list.hasOwnProperty(key)) {\n        const element = list[key];\n        addListener(element, 'click', () => on_click_event(element));\n      }\n    }\n  }\n}\n\nfunction handleErrors(response) {\n  if (!response.ok) {\n    console.log('Deu ruim');\n    response.json()\n      .then(data => alert(data.message))\n      .then(data => {\n        throw Error(data.message)\n      })\n\n  }\n  return response;\n}\n\nfunction range(size, startAt = 0) {\n  return [...Array(size).keys()].map(i => i + startAt);\n}\n\nfunction dateToString(date) {\n  const year = date.getFullYear().toString().padStart(4, '0');\n  const month = (date.getMonth() + 1).toString().padStart(2, '0');\n  const day = date.getDate().toString().padStart(2, '0');\n\n  return `${year}-${month}-${day}`\n}\n\nfunction setCookie(cname, cvalue, exdays) {\n  var d = new Date();\n  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));\n  var expires = \"expires=\" + d.toUTCString();\n  document.cookie = cname + \"=\" + cvalue + \";\" + expires + \";path=/\";\n}\n\nfunction getCookie(cname) {\n  var name = cname + \"=\";\n  var decodedCookie = decodeURIComponent(document.cookie);\n  var ca = decodedCookie.split(';');\n  for (var i = 0; i < ca.length; i++) {\n    var c = ca[i];\n    while (c.charAt(0) == ' ') {\n      c = c.substring(1);\n    }\n    if (c.indexOf(name) == 0) {\n      return c.substring(name.length, c.length);\n    }\n  }\n  return \"\";\n}\n\nfunction openDataHref(e) {\n  const data_href = e.getAttribute('data-href')\n\n  if (data_href) {\n    window.open(data_href, \"_self\")\n  }\n}\n\n\n\n//# sourceURL=webpack:///./frontend/js/utils.js?");
 
 /***/ }),
 
@@ -224,17 +236,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* WEBPACK VAR INJECTION */(f
 /***/ (function(module, exports) {
 
 eval("var g;\n\n// This works in non-strict mode\ng = (function() {\n\treturn this;\n})();\n\ntry {\n\t// This works if eval is allowed (see CSP)\n\tg = g || new Function(\"return this\")();\n} catch (e) {\n\t// This works if the window reference is available\n\tif (typeof window === \"object\") g = window;\n}\n\n// g can still be undefined, but nothing to do about it...\n// We return undefined, instead of nothing here, so it's\n// easier to handle this case. if(!global) { ...}\n\nmodule.exports = g;\n\n\n//# sourceURL=webpack:///(webpack)/buildin/global.js?");
-
-/***/ }),
-
-/***/ 0:
-/*!*********************************!*\
-  !*** multi ./frontend/index.js ***!
-  \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("module.exports = __webpack_require__(/*! ./frontend/index.js */\"./frontend/index.js\");\n\n\n//# sourceURL=webpack:///multi_./frontend/index.js?");
 
 /***/ })
 

@@ -5,3 +5,13 @@ import '@fortawesome/fontawesome-free/webfonts/fa-solid-900.svg'
 import '@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf'
 import '@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff'
 import '@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2'
+
+import {
+  setOnClickEvent,
+  openDataHref
+} from './utils.js'
+
+window.onload = () => {
+  setOnClickEvent("table-item-link", openDataHref);
+  setOnClickEvent("sidebar-item", openDataHref);
+}

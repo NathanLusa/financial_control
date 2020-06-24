@@ -2,9 +2,12 @@ const path = require('path');
 
 module.exports = {
   mode: "development",
-  entry: ['./frontend/index.js'],
+  entry: {
+    app: './frontend/index.js',
+    accounts_statment: './frontend/js/accounts_statment'
+  },
   output: {
-    filename: 'js/bundle.js',
+    filename: 'js/[name].js',
     path: path.resolve(__dirname, 'financial_control/static')
   },
   module: {
