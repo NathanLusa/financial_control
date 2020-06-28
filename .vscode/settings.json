@@ -9,5 +9,5 @@
   ],
   "sqltools.useNodeRuntime": true,
   "debug.node.autoAttach": "off",
-  "python.pythonPath": "/Users/nathanlusa/git/python/financial_control_django/venv/bin/python3.6"
+  "python.pythonPath": "venv/bin/python"
 }

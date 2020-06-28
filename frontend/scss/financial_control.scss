@@ -215,23 +215,8 @@ td del {
   color: gray;
 }
 
-#filter {
-  display: flex;
 
-  div {
-    display: flex;
-    justify-content: center;
-    margin-top: 2px;
-
-    button {
-      margin-left: 3px;
-    }
-  }
-
-  label {
-    max-width: 4rem;
-  }
-
-  // justify-content: center;
-  // align-items: center;
+#filter-description {
+  width: 20rem;
+  margin-left: 1rem;
 }

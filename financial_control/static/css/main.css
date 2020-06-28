@@ -13032,13 +13032,6 @@ td.amount {
 td del {
   color: gray; }
 
-#filter {
-  display: flex; }
-  #filter div {
-    display: flex;
-    justify-content: center;
-    margin-top: 2px; }
-    #filter div button {
-      margin-left: 3px; }
-  #filter label {
-    max-width: 4rem; }
+#filter-description {
+  width: 20rem;
+  margin-left: 1rem; }

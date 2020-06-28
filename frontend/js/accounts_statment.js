@@ -1,12 +1,11 @@
-import flatpickr from "flatpickr";
 import {
   addListener,
   setOnClickEvent,
   handleErrors,
   range,
-  dateToString,
   getCookie,
-  setCookie
+  setCookie,
+  formatDate
 } from './utils';
 
 class AccountStatment {
@@ -61,6 +60,16 @@ class AccountStatment {
   set description(description) {
     this.descriptionValue = description
   }
+
+  incMonth() {
+    this.monthValue = this.monthValue == 12 ? 1 : Number(this.monthValue) + 1
+    this.yearValue = this.monthValue == 1 ? Number(this.yearValue) + 1 : this.yearValue
+  }
+
+  decMonth() {
+    this.monthValue = this.monthValue == 1 ? 12 : Number(this.monthValue) - 1
+    this.yearValue = this.monthValue == 12 ? Number(this.yearValue) - 1 : this.yearValue
+  }
 }
 
 function setDashboardData(data) {
@@ -69,24 +78,25 @@ function setDashboardData(data) {
   setOnClickEvent("table-item-link", onClickNew);
 }
 
-function onClickFilter(e) {
-  account_statment.year = document.querySelector('#filter-year').querySelector('label.active').querySelector('input').getAttribute('data-year');
-  account_statment.month = document.querySelector('#filter-month').querySelector('label.active').querySelector('input').getAttribute('data-month');
-  account_statment.accounts = getSelectedAccounts();
-  account_statment.description = document.querySelector('#filter-description').value;
-
-  filter(account_statment)
+function onClickCalendarNext(e) {
+  account_statment.incMonth();
+  calendar.value = formatDate(account_statment.initial_date, 'Y-m')
+  onClickFilter(e)
 }
 
-function onClickFilterDropdown(e) {
-  if (e) {
-    const filter = e.parentElement.getAttribute('aria-labelledby')
-    account_statment.year = filter == 'filter-year' ? e.getAttribute('id') : account_statment.year;
-    account_statment.month = filter == 'filter-month' ? e.getAttribute('id') : account_statment.month;
-  }
+function onClickCalendarPrior(e) {
+  account_statment.decMonth();
+  calendar.value = formatDate(account_statment.initial_date, 'Y-m')
+  onClickFilter(e)
+}
 
-  document.querySelector('#filter').querySelector('button#filter-year').innerHTML = account_statment.year;
-  document.querySelector('#filter').querySelector('button#filter-month').innerHTML = account_statment.month;
+function onClickFilter(e) {
+  const date = calendar.value;
+
+  account_statment.year = date.split('-')[0]
+  account_statment.month = date.split('-')[1]
+  account_statment.accounts = getSelectedAccounts();
+  account_statment.description = filter_description.value;
 
   filter(account_statment)
 }
@@ -96,8 +106,8 @@ function filter(account_statment) {
 
   url.search = new URLSearchParams({
     accounts: account_statment.accounts,
-    initial_date: dateToString(account_statment.initial_date),
-    finish_date: dateToString(account_statment.finish_date),
+    initial_date: formatDate(account_statment.initial_date, 'Y-m-d'),
+    finish_date: formatDate(account_statment.finish_date, 'Y-m-d'),
     description: account_statment.description,
   })
 
@@ -128,8 +138,6 @@ function setAccountsSelected(accounts) {
   accounts_input.forEach(input => {
     input.checked = accounts.includes(input.getAttribute('id'))
   });
-
-
 }
 
 function getSelectedAccounts() {
@@ -224,48 +232,42 @@ function get_account_statment_main() {
 }
 
 function setEvents() {
-  // div_filter_year.querySelectorAll('input').forEach(button => addListener(button, 'click', () => onClickFilter(button)));
-  // div_filter_month.querySelectorAll('input').forEach(button => addListener(button, 'click', () => onClickFilter(button)));
   accounts_input.forEach(input => addListener(input, 'click', () => onClickFilter(input)));
+
+  addListener(calendar, 'change', () => onClickFilter(calendar));
+
+  const calendar_prior = document.querySelector('.filter #calendar-prior')
+  addListener(calendar_prior, 'click', () => onClickCalendarPrior(calendar_prior));
+
+  const calendar_next = document.querySelector('.filter #calendar-next')
+  addListener(calendar_next, 'click', () => onClickCalendarNext(calendar_next));
+
+  const button_search = document.querySelector('#filter-description-button')
+  addListener(button_search, 'click', () => onClickFilter(button_search));
 
   const buttonNewTransaction = document.getElementById("button-new-transaction");
   addListener(buttonNewTransaction, 'click', () => onClickNew(buttonNewTransaction));
 
-  const buttonSearch = document.getElementById("filter-description-button");
-  addListener(buttonSearch, 'click', () => onClickFilter(buttonSearch));
+  // const buttonSearch = document.getElementById("filter-description-button");
+  // addListener(buttonSearch, 'click', () => onClickFilter(buttonSearch));
 };
 
-function setDefaultFilter() {
-  const year_input = div_filter_year.querySelector('#year-' + account_statment.year)
-  if (year_input) {
-    year_input.checked = true;
-    year_input.parentElement.classList.add('active')
-  }
-
-  const month_input = div_filter_month.querySelector('#month-' + account_statment.month.toString().padStart(2, '0'))
-  if (month_input) {
-    month_input.checked = true;
-    month_input.parentElement.classList.add('active')
-  }
-};
-
+function setDefaults() {
+  calendar.value = formatDate(account_statment.initial_date, 'Y-m');
+  setAccountsSelected(account_statment.accounts)
+}
 
 const accounts_input = document.querySelector('#table-accounts').querySelectorAll('input');
 const account_statment = get_account_statment_main();
 const modal_dashboard = document.getElementById("modal-dashboard")
 const modal_title = modal_dashboard.querySelector(".modal-title")
 const modal_body = modal_dashboard.querySelector(".modal-body")
-const div_filter_year = document.querySelector('#filter-year')
-const div_filter_month = document.querySelector('#filter-month')
+const calendar = document.querySelector('.filter #calendar')
+const filter_description = document.querySelector('#filter-description')
 
 window.onload = () => {
+  setDefaults();
   setEvents();
-  // setDefaultFilter();
-  setAccountsSelected(account_statment.accounts)
-
-  flatpickr('#calendar', {
-    mode: "range"
-  })
 
   filter(account_statment);
 }
