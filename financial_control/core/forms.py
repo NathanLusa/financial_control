@@ -2,7 +2,7 @@ from datetime import date
 from django import forms
 from django.forms import ModelForm
 
-from .models import Account, Category, Transaction
+from .models import Account, Category, Transaction, Transfer
 from .fields import DateField  # , CharField, TimeField
 
 
@@ -58,3 +58,12 @@ class TransactionForm(ModelForm):
     #     Account, on_delete=models.PROTECT, related_name='transactions')
     # category = models.ForeignKey(Category, on_delete=models.PROTECT)
     # observation = models.CharField(max_length=200, null=True, blank=True)
+
+
+class TransferForm(ModelForm):
+
+    date = DateField(value=date.today())
+
+    class Meta:
+        model = Transfer
+        fields = ['source', 'destination', 'date', 'value', 'description']

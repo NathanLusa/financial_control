@@ -8,27 +8,27 @@
   <div class="col-md-12">
     <div class="card shadow p-3 mb-5 bg-white rounded">
       <div class="card-header">
-        <h4>Transactions</h4>
-        <a class="btn btn-outline-primary" href="{% url 'transaction_new' %}">+</a>
+        <h4>Transfers</h4>
+        <a class="btn btn-outline-primary" href="{% url 'transfer_new' %}">+</a>
       </div>
       <div class="card-body">
-        {% if transactions %}
+        {% if transfers %}
         <table class="table">
           <thead>
             <tr>
               <th scope="col">#</th>
               <th scope="col">Date</th>
               <th scope="col">Description</th>
-              <th scope="col">Status</th>
+              <th scope="col">Value</th>
             </tr>
           </thead>
           <tbody>
-            {% for transaction in transactions %}
-            <tr class="table-item-link" data-href="{% url 'transaction_form' transaction.id %}">
-              <th scope="row">{{ transaction.id }}</th>
-              <td class="date">{{ transaction.date }}</td>
-              <td>{{ transaction.description }}</td>
-              <td>{{ transaction.get_status_label }}</td>
+            {% for transfer in transfers %}
+            <tr class="table-item-link" data-href="{% url 'transfer_form' transfer.id %}">
+              <th scope="row">{{ transfer.id }}</th>
+              <td class="date">{{ transfer.date }}</td>
+              <td>{{ transfer }}</td>
+              <td>{{ transfer.value }}</td>
             </tr>
             {% endfor  %}
           </tbody>
@@ -43,30 +43,30 @@
   </div>
 </div>
 
-{% if transactions.has_other_pages %}
+{% comment %} {% if transfers.has_other_pages %}
 <nav aria-label="...">
   <ul class="pagination pagination-sm justify-content-center">
-    <li class="page-item {% if not transactions.has_previous %}disabled{% endif %}">
+    <li class="page-item {% if not transfers.has_previous %}disabled{% endif %}">
       <a class="page-link" href="?page={{ users.previous_page_number }}" aria-label="Anterior">
         <span aria-hidden="true">&laquo;</span>
         <span class="sr-only">Anterior</span>
       </a>
     </li>
 
-    {% for i in transactions.paginator.page_range %}
-    <li class="page-item {% if transactions.number == i %}active{% endif %}">
+    {% for i in transfers.paginator.page_range %}
+    <li class="page-item {% if transfers.number == i %}active{% endif %}">
       <a class="page-link" href="?page={{ i }}">{{ i }}</a>
     </li>
     {% endfor %}
 
-    <li class="page-item {% if not transactions.has_next %}disabled{% endif%}">
-      <a class="page-link" href="?page={{ transactions.next_page_number }}" aria-label="Próximo">
+    <li class="page-item {% if not transfers.has_next %}disabled{% endif%}">
+      <a class="page-link" href="?page={{ transfers.next_page_number }}" aria-label="Próximo">
         <span aria-hidden="true">&raquo;</span>
         <span class="sr-only">Próximo</span>
       </a>
     </li>
   </ul>
 </nav>
-{% endif %}
+{% endif %} {% endcomment %}
 
 {% endblock main %}

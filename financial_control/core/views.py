@@ -1,10 +1,11 @@
 import decimal
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from .forms import AccountForm, CategoryForm, TransactionForm
-from .models import Account, Category, Transaction, MonthBalance
+from .forms import AccountForm, CategoryForm, TransactionForm, TransferForm
+from .models import Account, Category, Transaction, MonthBalance, Transfer
 
 from .common import utils
 from .common.choices import NoYesChoises, StatusChoises
@@ -128,7 +129,16 @@ def category_delete(request, pk):
 
 
 def transaction_list(request):
-    transactions = Transaction.objects.all().order_by('-id')
+    transaction_list = Transaction.objects.all().order_by('-id')
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(transaction_list, 50)
+    try:
+        transactions = paginator.page(page)
+    except PageNotAnInteger:
+        transactions = paginator.page(1)
+    except EmptyPage:
+        transactions = paginator.page(paginator.num_pages)
 
     return render(request, 'transaction/transaction_list.html', {'transactions': transactions})
 
@@ -148,7 +158,7 @@ def transaction_new(request):
     form = TransactionForm()
     param_ajax = request.GET.get('ajax')
     url_post = reverse('transaction_new')
-    param_next = request.GET.get('next')
+    param_next = request.GET.get('next', 'transaction_list')
     return render(request, 'transaction/transaction_form.html', {'form': form, 'url_post': url_post, 'ajax': param_ajax, 'next': param_next})
 
 
@@ -165,7 +175,7 @@ def transaction_form(request, pk):
             print(f'errors: {form.errors}')
 
     param_ajax = request.GET.get('ajax')
-    param_next = request.GET.get('next')
+    param_next = request.GET.get('next', 'transaction_list')
 
     form = TransactionForm(instance=transaction)
     url_post = reverse('transaction_form', args=[pk])
@@ -188,3 +198,66 @@ def transaction_delete(request, pk):
         transaction.delete()
 
     return redirect('transaction_list')
+
+
+def transfer_list(request):
+    transfers = Transfer.objects.all().order_by('-id')
+
+    return render(request, 'transfer/transfer_list.html', {'transfers': transfers})
+
+
+def transfer_new(request):
+    if request.method == 'POST':
+        next = request.GET.get('next', 'transfer_list')
+        form = TransferForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+            return redirect(next)
+        else:
+            print(f'errors: {form.errors}')
+            return JsonResponse({'error': 500, 'message': form.errors}, status=400)
+
+    form = TransferForm()
+    param_ajax = request.GET.get('ajax')
+    url_post = reverse('transfer_new')
+    param_next = request.GET.get('next', 'transfer_list')
+    return render(request, 'transfer/transfer_form.html', {'form': form, 'url_post': url_post, 'ajax': param_ajax, 'next': param_next})
+
+
+def transfer_form(request, pk):
+    transfer = get_object_or_404(Transfer, pk=pk)
+    if request.method == 'POST':
+        next = request.GET.get('next', 'transfer_list')
+        form = TransferForm(request.POST, instance=transfer)
+        if form.is_valid():
+            form.save()
+
+            return redirect(next)
+        else:
+            print(f'errors: {form.errors}')
+
+    param_ajax = request.GET.get('ajax')
+    param_next = request.GET.get('next', 'transfer_list')
+
+    form = TransferForm(instance=transfer)
+    url_post = reverse('transfer_form', args=[pk])
+
+    next_url = ''
+    next_transfer_list = Transfer.objects.all().order_by('date', '-value')
+    # next_transfer_list.get(pk=pk)
+    next_transfer = False
+    if next_transfer:
+        next_url = reverse('transfer_form', args=[next_transfer.id])
+
+    return render(request, 'transfer/transfer_form.html', {'form': form, 'id': pk, 'url_post': url_post, 'ajax': param_ajax, 'next': param_next, 'next_url': next_url})
+
+
+def transfer_delete(request, pk):
+    transfer = get_object_or_404(Transfer, pk=pk)
+
+    # and request.user.is_authenticated and request.user.username == creator:
+    if request.method == "POST":
+        transfer.delete()
+
+    return redirect('transfer_list')

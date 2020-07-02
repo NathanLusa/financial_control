@@ -99,7 +99,6 @@ def get_month_balance_json(month_balances, transactions, accounts):
                 expense_value += transaction.value
 
         amount = income_value + expense_value
-        prev_amount += amount
 
         month = months.order_by('date').last()
         if not month:
@@ -113,7 +112,8 @@ def get_month_balance_json(month_balances, transactions, accounts):
             'income_value': income_value,
             'expense_value': expense_value,
             'amount': amount,
-            'accumulated': prev_amount
+            'prev_amount': prev_amount,
+            'accumulated': prev_amount + amount
         }
         month_balances_json.append(item)
 

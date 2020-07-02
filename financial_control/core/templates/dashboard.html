@@ -35,17 +35,24 @@
       </div>
       <div class="card-body">
         <table class="table" id="table-accounts">
-          {% for account in accounts %}
-          <tr>
-            <th>
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="{{account.id}}" checked>
-                <label class="custom-control-label" for="{{account.id}}">{{account.description}}</label>
-              </div>
-            </th>
-            <td>{{account.value}}</td>
-          </tr>
-          {% endfor %}
+          <thead>
+            <tr>
+              <th scope="col">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for account in accounts %}
+            <tr>
+              <th>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="{{account.id}}" checked>
+                  <label class="custom-control-label" for="{{account.id}}">{{account.description}}</label>
+                </div>
+              </th>
+              <td>{{account.value}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
         </table>
       </div>
     </div>
@@ -71,9 +78,24 @@
     <div class="card shadow p-3 mb-5 bg-white rounded">
       <div class="card-header">
         <h4>Transactions</h4>
-        <button class="btn btn-outline-primary" id="button-new-transaction"
+        <!-- Exemplo de botão danger dividido -->
+        <div class="btn-group">
+          <button type="button" class="btn btn-outline-primary" id="button-new-transaction"
+            data-href="{% url 'transaction_new' %}?ajax=true&next=dashboard" data-toggle="modal"
+            data-target="#modal-dashboard" data-modal-title="Transactions">+</button>
+          <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="sr-only">Dropdown</span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right">
+            <button type="button" class="btn dropdown-item" id="button-new-transfer"
+              data-href="{% url 'transaction_new' %}?ajax=true&next=dashboard" data-toggle="modal"
+              data-target="#modal-dashboard" data-modal-title="Transfer">Transfer</button>
+          </div>
+        </div>
+        <!-- <button class="btn btn-outline-primary" id="button-new-transaction"
           data-href="{% url 'transaction_new' %}?ajax=true&next=dashboard" data-toggle="modal"
-          data-target="#modal-dashboard" data-modal-title="Transactions">+</button>
+          data-target="#modal-dashboard" data-modal-title="Transactions">+</button> -->
 
       </div>
       <div class="card-body">

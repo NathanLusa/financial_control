@@ -2,7 +2,6 @@ import {
   addListener,
   setOnClickEvent,
   handleErrors,
-  range,
   getCookie,
   setCookie,
   formatDate
@@ -179,11 +178,24 @@ function MonthBalanceItem(month_balance) {
           </tr>`;
 }
 
-function TransactionTable(transactions) {
+function TransactionTable(month_balance, transactions) {
   var total = 0;
   const f_accumulate = (value) => total += value;
 
-  return transactions.map(transaction => TransactionItem(transaction, f_accumulate)).join('');
+  const initial_amount = month_balance
+    .filter(month => month.prev_amount != 0)
+    .map(month => {
+      return {
+        id: '#',
+        url: '#',
+        date: month.date,
+        description: `Initial amount ${month.account}`,
+        value: month.prev_amount
+      }
+    });
+
+  return initial_amount.map(transaction => TransactionItem(transaction, f_accumulate)).join('') +
+    transactions.map(transaction => TransactionItem(transaction, f_accumulate)).join('');
 }
 
 function TransactionItem(transaction, f_accumulate) {
@@ -191,7 +203,12 @@ function TransactionItem(transaction, f_accumulate) {
   const total = f_accumulate(amount);
 
   return `
-    <tr class="table-item-link" data-toggle="modal" data-target="#modal-dashboard" data-href="${transaction.url}" data-modal-title="Transaction" data-transaction-id="${transaction.id}">
+    <tr ${transaction.id > 0 ? 'class="table-item-link"' : ''}
+        data-toggle="modal" 
+        data-target="#modal-dashboard" 
+        data-href="${transaction.url}" 
+        data-modal-title="Transaction" 
+        data-transaction-id="${transaction.id}">
       <th scope="row" class="date">${transaction.date}</th>
       <td>${transaction.description}</td>
       <td class="amount bold ${amount_class(amount)}">R$ ${amount.toFixed(2)}</td>
@@ -204,7 +221,7 @@ function update(transactions, month_balances) {
   const table_transactions = document.getElementById("table-transactions");
   const table_month_balances = document.getElementById("table-month-balances");
 
-  table_transactions.innerHTML = TransactionTable(transactions)
+  table_transactions.innerHTML = TransactionTable(month_balances, transactions)
   table_month_balances.innerHTML = MonthBalanceTable(month_balances)
 }
 
@@ -247,6 +264,9 @@ function setEvents() {
 
   const buttonNewTransaction = document.getElementById("button-new-transaction");
   addListener(buttonNewTransaction, 'click', () => onClickNew(buttonNewTransaction));
+
+  const buttonNewTransfer = document.getElementById("button-new-transfer");
+  addListener(buttonNewTransfer, 'click', () => onClickNew(buttonNewTransfer));
 
   // const buttonSearch = document.getElementById("filter-description-button");
   // addListener(buttonSearch, 'click', () => onClickFilter(buttonSearch));

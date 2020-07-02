@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 from .common.choices import StatusChoises, AccountTypeChoises, MovementTypeChoises, NoYesChoises
 from .common.models import BaseModel
 
@@ -76,3 +78,16 @@ class MonthBalance(BaseModel):
 
     def __str__(self):
         return f'{self.date} - {self.amount}'
+
+
+class Transfer(BaseModel):
+    source = models.ForeignKey(
+        Account, on_delete=models.CASCADE, related_name='account_sources')
+    destination = models.ForeignKey(
+        Account, on_delete=models.CASCADE, related_name='account_destinations')
+    date = models.DateField(default=timezone.now)
+    value = models.DecimalField(max_digits=15, decimal_places=2, default=0.0)
+    description = models.CharField(max_length=100, null=True, blank=True)
+
+    def __str__(self):
+        return f'Transaction from "{self.source}" to "{self.destination}"'

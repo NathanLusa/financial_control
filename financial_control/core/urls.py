@@ -38,4 +38,10 @@ urlpatterns = [
     path('transactions/<int:pk>', views.transaction_form, name='transaction_form'),
     path('transactions/<int:pk>/delete',
          views.transaction_delete, name='transaction_delete'),
+
+    path('transfers/', views.transfer_list, name='transfer_list'),
+    re_path('transfers/new/$', views.transfer_new, name='transfer_new'),
+    path('transfers/<int:pk>', views.transfer_form, name='transfer_form'),
+    path('transfers/<int:pk>/delete',
+         views.transfer_delete, name='transfer_delete'),
 ]
