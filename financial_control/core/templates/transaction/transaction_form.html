@@ -4,12 +4,12 @@
 
 {% block main %}
 
-<h1>Transfer form</h1>
+<h1>Transaction form</h1>
 
-{% url 'transfer_delete' id as delete_url %}
+{% url 'transaction_delete' id as delete_url %}
 
 <!-- Modal -->
-{% include 'includes/bootstrap_modal_delete.html' with delete_url=delete_url title='Delete' message='Are you sure you want to delete this transfer?' %}
+{% include 'includes/bootstrap_modal_delete.html' with delete_url=delete_url title='Delete' message='Are you sure you want to delete this transaction?' %}
 
 <form method="post" action="{{ url_post }}?next={{ next }}">
   {% csrf_token %}
@@ -18,7 +18,7 @@
 
   <button type="submit" class="btn btn-primary">Save</button>
   {% if ajax %}
-  <button type="button" class="btn btn-primary" id="button-next-transfer" data-href="{{ next_url }}">Next</button>
+  <button type="button" class="btn btn-primary" id="button-next-transaction" data-href="{{ next_url }}">Next</button>
   {% else %}
   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalDelete">Delete</button>
   {% endif %}

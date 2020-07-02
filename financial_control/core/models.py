@@ -88,6 +88,10 @@ class Transfer(BaseModel):
     date = models.DateField(default=timezone.now)
     value = models.DecimalField(max_digits=15, decimal_places=2, default=0.0)
     description = models.CharField(max_length=100, null=True, blank=True)
+    source_transaction = models.ForeignKey(
+        Transaction, on_delete=models.CASCADE, related_name='source_transaction')
+    destination_transaction = models.ForeignKey(
+        Transaction, on_delete=models.CASCADE, related_name='destination_transaction')
 
     def __str__(self):
-        return f'Transaction from "{self.source}" to "{self.destination}"'
+        return f'Transfer from "{self.source}" to "{self.destination}"'
