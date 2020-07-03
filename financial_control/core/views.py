@@ -156,10 +156,13 @@ def transaction_new(request):
             return JsonResponse({'error': 500, 'message': form.errors}, status=400)
 
     form = TransactionForm()
+
     param_ajax = request.GET.get('ajax')
-    url_post = reverse('transaction_new')
     param_next = request.GET.get('next', 'transaction_list')
-    return render(request, 'transaction/transaction_form.html', {'form': form, 'url_post': url_post, 'ajax': param_ajax, 'next': param_next})
+
+    url_post = reverse('transaction_new') + f'?next={param_next}'
+
+    return render(request, 'transaction/transaction_form.html', {'form': form, 'url_post': url_post, 'ajax': param_ajax})
 
 
 def transaction_form(request, pk):
@@ -174,20 +177,16 @@ def transaction_form(request, pk):
         else:
             print(f'errors: {form.errors}')
 
+    form = TransactionForm(instance=transaction)
+
     param_ajax = request.GET.get('ajax')
     param_next = request.GET.get('next', 'transaction_list')
 
-    form = TransactionForm(instance=transaction)
-    url_post = reverse('transaction_form', args=[pk])
+    url_post = reverse('transaction_form', args=[pk]) + f'?next={param_next}'
+    url_delete = reverse('transaction_delete', args=[
+                         pk]) + f'?next={param_next}'
 
-    next_url = ''
-    next_transaction_list = Transaction.objects.all().order_by('date', '-value')
-    # next_transaction_list.get(pk=pk)
-    next_transaction = False
-    if next_transaction:
-        next_url = reverse('transaction_form', args=[next_transaction.id])
-
-    return render(request, 'transaction/transaction_form.html', {'form': form, 'id': pk, 'url_post': url_post, 'ajax': param_ajax, 'next': param_next, 'next_url': next_url})
+    return render(request, 'transaction/transaction_form.html', {'form': form, 'url_post': url_post, 'url_delete': url_delete, 'ajax': param_ajax})
 
 
 def transaction_delete(request, pk):
@@ -197,7 +196,9 @@ def transaction_delete(request, pk):
     if request.method == "POST":
         transaction.delete()
 
-    return redirect('transaction_list')
+    next = request.GET.get('next', 'transaction_list')
+
+    return redirect(next)
 
 
 def transfer_list(request):
@@ -219,10 +220,13 @@ def transfer_new(request):
             return JsonResponse({'error': 500, 'message': form.errors}, status=400)
 
     form = TransferForm()
+
     param_ajax = request.GET.get('ajax')
-    url_post = reverse('transfer_new')
     param_next = request.GET.get('next', 'transfer_list')
-    return render(request, 'transfer/transfer_form.html', {'form': form, 'url_post': url_post, 'ajax': param_ajax, 'next': param_next})
+
+    url_post = reverse('transfer_new') + f'?next={param_next}'
+
+    return render(request, 'transfer/transfer_form.html', {'form': form, 'url_post': url_post, 'ajax': param_ajax})
 
 
 def transfer_form(request, pk):
@@ -237,20 +241,15 @@ def transfer_form(request, pk):
         else:
             print(f'errors: {form.errors}')
 
+    form = TransferForm(instance=transfer)
+
     param_ajax = request.GET.get('ajax')
     param_next = request.GET.get('next', 'transfer_list')
 
-    form = TransferForm(instance=transfer)
-    url_post = reverse('transfer_form', args=[pk])
+    url_post = reverse('transfer_form', args=[pk]) + f'?next={param_next}'
+    url_delete = reverse('transfer_delete', args=[pk]) + f'?next={param_next}'
 
-    next_url = ''
-    next_transfer_list = Transfer.objects.all().order_by('date', '-value')
-    # next_transfer_list.get(pk=pk)
-    next_transfer = False
-    if next_transfer:
-        next_url = reverse('transfer_form', args=[next_transfer.id])
-
-    return render(request, 'transfer/transfer_form.html', {'form': form, 'id': pk, 'url_post': url_post, 'ajax': param_ajax, 'next': param_next, 'next_url': next_url})
+    return render(request, 'transfer/transfer_form.html', {'form': form, 'url_post': url_post, 'url_delete': url_delete, 'ajax': param_ajax})
 
 
 def transfer_delete(request, pk):
@@ -260,4 +259,6 @@ def transfer_delete(request, pk):
     if request.method == "POST":
         transfer.delete()
 
-    return redirect('transfer_list')
+    next = request.GET.get('next', 'transfer_list')
+
+    return redirect(next)
