@@ -58,6 +58,7 @@ class AccountStatment {
 
   set description(description) {
     this.descriptionValue = description
+    this.setCookie('description', this.descriptionValue, 1)
   }
 
   incMonth() {
@@ -109,6 +110,8 @@ function filter(account_statment) {
     finish_date: formatDate(account_statment.finish_date, 'Y-m-d'),
     description: account_statment.description,
   })
+
+  console.log(account_statment.description)
 
   fetch(url)
     .then(handleErrors)
@@ -203,8 +206,7 @@ function TransactionItem(transaction, f_accumulate) {
   const total = f_accumulate(amount);
 
   return `
-    <tr ${transaction.id > 0 ? 'class="table-item-link"' : ''}
-        data-toggle="modal" 
+    <tr ${transaction.id > 0 ? 'class="table-item-link" data-toggle="modal"' : ''}
         data-target="#modal-dashboard" 
         data-href="${transaction.url}" 
         data-modal-title="Transaction" 
@@ -234,6 +236,7 @@ function get_account_statment_main() {
   const cookie_selected_year = getCookie('year')
   const cookie_selected_month = getCookie('month')
   const cookie_selected_accounts = getCookie('accounts')
+  const cookie_selected_description = getCookie('description')
 
   if (cookie_selected_year != "") {
     selected_year = cookie_selected_year
@@ -245,7 +248,7 @@ function get_account_statment_main() {
     selected_accounts = cookie_selected_accounts
   };
 
-  return new AccountStatment(selected_month, selected_year, selected_accounts, '', setCookie)
+  return new AccountStatment(selected_month, selected_year, selected_accounts, cookie_selected_description, setCookie)
 }
 
 function setEvents() {
@@ -274,6 +277,7 @@ function setEvents() {
 
 function setDefaults() {
   calendar.value = formatDate(account_statment.initial_date, 'Y-m');
+  filter_description.value = account_statment.description
   setAccountsSelected(account_statment.accounts)
 }
 
