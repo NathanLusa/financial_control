@@ -11,19 +11,14 @@
 
 
 <!-- Filter -->
-<div class="container-fluid filter">
-  <div class="row">
-    <buton class="btn btn-primary" id="calendar-prior">&larr;</buton>
-    <input type="month" id="calendar">
-    <buton class="btn btn-primary" id="calendar-next">&rarr;</buton>
-    <!-- </div> -->
+<div class="container-fluid filter shadow p-4 mb-4 bg-white rounded">
+  <buton class="btn btn-primary" id="calendar-prior">&larr;</buton>
+  <input type="month" id="calendar">
+  <buton class="btn btn-primary" id="calendar-next">&rarr;</buton>
 
-    <!-- Description -->
-    <!-- <div class="row"> -->
-    <input type="search" placeholder="Search" aria-label="Search" id="filter-description">
-    <button class="btn btn-outline-primary" id="filter-description-button">Search</button>
-  </div>
-
+  <!-- Description -->
+  <input type="search" placeholder="Search" aria-label="Search" id="filter-description">
+  <button class="btn btn-outline-primary" id="filter-description-button">Search</button>
 </div>
 
 <!-- Tables -->
@@ -46,7 +41,11 @@
               <th>
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="{{account.id}}" checked>
-                  <label class="custom-control-label" for="{{account.id}}">{{account.description}}</label>
+                  <label class="custom-control-label" for="{{account.id}}">
+                    <h5>
+                      <span class="badge badge-{{account.get_color_label|lower}}">{{account.description}}</span>
+                    </h5>
+                  </label>
                 </div>
               </th>
               <td>{{account.value}}</td>

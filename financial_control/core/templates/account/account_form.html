@@ -4,23 +4,24 @@
 
 {% block main %}
 
-<h1>Account form</h1>
+<div {% if not ajax %}class="container-fluid bg-white p-4" {% endif %}>
+  <h1>Account form</h1>
 
-{% url 'account_delete' id as delete_url %}
+  {% url 'account_delete' id as delete_url %}
 
-<!-- Modal -->
-{% include 'includes/bootstrap_modal_delete.html' with delete_url=delete_url title='Delete' message='Are you sure you want to delete this account?' %}
+  <!-- Modal -->
+  {% include 'includes/bootstrap_modal_delete.html' with delete_url=delete_url title='Delete' message='Are you sure you want to delete this account?' %}
 
-<form method="post" action="{{ url_post }}?next={{ next }}">
-  {% csrf_token %}
+  <form method="post" action="{{ url_post }}?next={{ next }}">
+    {% csrf_token %}
 
-  {% include 'includes/bootstrap_form.html' with form=form %}
+    {% include 'includes/bootstrap_form.html' with form=form %}
 
-  <button type="submit" class="btn btn-primary">Save</button>
-  {% if not ajax %}
-  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalDelete">Delete</button>
-  {% endif %}
+    <button type="submit" class="btn btn-primary">Save</button>
+    {% if not ajax %}
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalDelete">Delete</button>
+    {% endif %}
 
-</form>
-
+  </form>
+</div>
 {% endblock main %}

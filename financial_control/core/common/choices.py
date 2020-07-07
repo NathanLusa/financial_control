@@ -41,3 +41,14 @@ class FrequencyChoices(IntegerChoices):
     WEEKLY = 1, _('Weekly')
     MONTHLY = 2, _('Monthly')
     YEARLY = 3, _('Yearly')
+
+
+class ColorChoices(IntegerChoices):
+    PRIMARY = 0, _('Primary')
+    SECONDARY = 1, _('Secondary')
+    SUCCESS = 2, _('Success')
+    DANGER = 3, _('Danger')
+    WARNING = 4, _('Warning')
+    INFO = 5, _('Info')
+    LIGHT = 6, _('Light')
+    DARK = 7, _('Dark')

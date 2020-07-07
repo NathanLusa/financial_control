@@ -2,7 +2,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils import timezone
 
-from .common.choices import StatusChoices, AccountTypeChoices, MovementTypeChoices, NoYesChoices, FrequencyChoices
+from .common.choices import StatusChoices, AccountTypeChoices, MovementTypeChoices, NoYesChoices, FrequencyChoices, ColorChoices
 from .common.models import BaseModel
 
 
@@ -16,6 +16,8 @@ class Account(BaseModel):
     opening_type = models.IntegerField(
         choices=MovementTypeChoices.choices, default=MovementTypeChoices.POSITIVE)
     opening_balance_date = models.DateField()
+    color = models.IntegerField(
+        choices=ColorChoices.choices, default=ColorChoices.PRIMARY)
 
     def __str__(self):
         return self.description
@@ -26,8 +28,11 @@ class Account(BaseModel):
     def get_type_label(self):
         return AccountTypeChoices(self.type).label
 
-    def get_opening_type_labe(self):
+    def get_opening_type_label(self):
         return MovementTypeChoices(self.opening_type).label
+
+    def get_color_label(self):
+        return ColorChoices(self.color).label
 
 
 class Category(BaseModel):

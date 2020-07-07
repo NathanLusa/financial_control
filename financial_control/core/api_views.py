@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.urls import reverse
 
 from .common import utils, exceptions
+from .common.choices import ColorChoices
 from .models import Account, Category, Transaction, MonthBalance
 
 
@@ -48,6 +49,11 @@ def get_transactions_json(transactions):
         item = {
             'id': transaction.id,
             'date': transaction.date.isoformat(),
+            'account': {
+                'id': transaction.account.id,
+                'description': transaction.account.description,
+                'color': ColorChoices(transaction.account.color).label
+            },
             'description': transaction.description,
             'value': transaction.value,
             'category': transaction.category.description,
@@ -66,6 +72,7 @@ def get_accounts_json(accounts):
             'id': account.id,
             'description': account.description,
             'value': decimal.Decimal(0.0),
+            'color': account.color
         }
         accounts_json.append(item)
 
@@ -107,7 +114,11 @@ def get_month_balance_json(month_balances, transactions, accounts):
 
         item = {
             'id': month.id,
-            'account': month.account.description,
+            'account': {
+                'id': month.account.id,
+                'description': month.account.description,
+                'color': ColorChoices(month.account.color).label
+            },
             'date': month.date,
             'income_value': income_value,
             'expense_value': expense_value,

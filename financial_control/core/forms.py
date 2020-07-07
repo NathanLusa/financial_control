@@ -13,7 +13,7 @@ class AccountForm(ModelForm):
     class Meta:
         model = Account
         fields = ['description', 'status', 'type', 'opening_balance',
-                  'opening_type', 'opening_balance_date']
+                  'opening_type', 'opening_balance_date', 'color']
 
 
 class CategoryForm(ModelForm):

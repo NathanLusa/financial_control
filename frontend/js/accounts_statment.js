@@ -173,7 +173,11 @@ function MonthBalanceItem(month_balance) {
   const accumulated = parseFloat(month_balance.accumulated)
 
   return `<tr>
-            <th scope="row">${month_balance.account}</th>
+            <th scope="row">
+              <h5>
+                <span class="badge badge-${month_balance.account.color.toLowerCase()}">${month_balance.account.description}</span>
+              </h5>
+            </th>
             <td class="amount ${amount_class(income)}">R$ ${income.toFixed(2)}</td>
             <td class="amount ${amount_class(expense)}">R$ ${expense.toFixed(2)}</td>
             <td class="amount ${amount_class(amount)}">R$ ${amount.toFixed(2)}</td>
@@ -191,8 +195,12 @@ function TransactionTable(month_balance, transactions) {
       return {
         id: '#',
         url: '#',
+        account: {
+          description: month.account.description,
+          color: month.account.color
+        },
         date: month.date,
-        description: `Initial amount ${month.account}`,
+        description: 'Initial amount',
         value: month.prev_amount
       }
     });
@@ -212,7 +220,7 @@ function TransactionItem(transaction, f_accumulate) {
         data-modal-title="Transaction" 
         data-transaction-id="${transaction.id}">
       <th scope="row" class="date">${transaction.date}</th>
-      <td>${transaction.description}</td>
+      <td>${transaction.description} <span class="badge badge-${transaction.account.color.toLowerCase()}">${transaction.account.description}</span></td>
       <td class="amount bold ${amount_class(amount)}">R$ ${amount.toFixed(2)}</td>
       <td class="amount ${amount_class(total)}">R$ ${total.toFixed(2)}</td>
     </tr>
