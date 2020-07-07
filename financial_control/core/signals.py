@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 
-from .common.choices import MovementTypeChoises, NoYesChoises
+from .common.choices import MovementTypeChoices, NoYesChoices
 from .common.utils import last_day_month, first_day_month
 from .models import Transaction, MonthBalance, Transfer, Category
 
@@ -53,7 +53,7 @@ def create_transfer_transactions(instance, **kwargs):
             description=instance.description,
             account=instance.source,
             category=Category.objects.filter(
-                is_transaction=NoYesChoises.YES, movement_type=MovementTypeChoises.NEGATIVE).first()
+                is_transaction=NoYesChoices.YES, movement_type=MovementTypeChoices.NEGATIVE).first()
         )
         source_transaction.save()
         instance.source_transaction = source_transaction
@@ -65,7 +65,7 @@ def create_transfer_transactions(instance, **kwargs):
             description=instance.description,
             account=instance.destination,
             category=Category.objects.filter(
-                is_transaction=NoYesChoises.YES, movement_type=MovementTypeChoises.POSITIVE).first()
+                is_transaction=NoYesChoices.YES, movement_type=MovementTypeChoices.POSITIVE).first()
         )
         destination_transaction.save()
         instance.destination_transaction = destination_transaction

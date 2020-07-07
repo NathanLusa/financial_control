@@ -4,11 +4,11 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from .forms import AccountForm, CategoryForm, TransactionForm, TransferForm
-from .models import Account, Category, Transaction, MonthBalance, Transfer
+from .forms import AccountForm, CategoryForm, TransactionForm, TransferForm, ProgramedTransactionForm
+from .models import Account, Category, Transaction, MonthBalance, Transfer, ProgramedTransaction
 
 from .common import utils
-from .common.choices import NoYesChoises, StatusChoises
+from .common.choices import NoYesChoices, StatusChoices
 
 
 def index(request):
@@ -38,7 +38,7 @@ def process_balance(request):
 
 
 def dashboard(request):
-    accounts = Account.objects.filter(status=StatusChoises.ACTIVE)
+    accounts = Account.objects.filter(status=StatusChoices.ACTIVE)
     years = range(2015, 2021)
     months = range(1, 13)
     return render(request, 'dashboard.html', {'accounts': accounts, 'years': years, 'months': months})
@@ -90,7 +90,7 @@ def account_delete(request, pk):
 
 def category_list(request):
     categories = Category.objects.all().exclude(
-        is_transaction=NoYesChoises.YES).order_by('description', 'id')
+        is_transaction=NoYesChoices.YES).order_by('description', 'id')
 
     return render(request, 'category/category_list.html', {'categories': categories})
 
@@ -260,5 +260,72 @@ def transfer_delete(request, pk):
         transfer.delete()
 
     next = request.GET.get('next', 'transfer_list')
+
+    return redirect(next)
+
+
+def programed_transaction_list(request):
+    programed_transactions = ProgramedTransaction.objects.all().order_by('-id')
+
+    return render(request, 'programed_transaction/programed_transaction_list.html', {'programed_transactions': programed_transactions})
+
+
+def programed_transaction_new(request):
+    print('is here')
+    if request.method == 'POST':
+        next = request.GET.get('next', 'programed_transaction_list')
+        form = ProgramedTransactionForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+            return redirect(next)
+        else:
+            print(f'errors: {form.errors}')
+            return JsonResponse({'error': 500, 'message': form.errors}, status=400)
+
+    form = ProgramedTransactionForm()
+
+    param_ajax = request.GET.get('ajax')
+    param_next = request.GET.get('next', 'programed_transaction_list')
+
+    url_post = reverse('programed_transaction_new') + f'?next={param_next}'
+
+    return render(request, 'programed_transaction/programed_transaction_form.html', {'form': form, 'url_post': url_post, 'ajax': param_ajax})
+
+
+def programed_transaction_form(request, pk):
+    programed_transaction = get_object_or_404(ProgramedTransaction, pk=pk)
+    if request.method == 'POST':
+        next = request.GET.get('next', 'programed_transaction_list')
+        form = ProgramedTransactionForm(
+            request.POST, instance=programed_transaction)
+        if form.is_valid():
+            form.save()
+
+            return redirect(next)
+        else:
+            print(f'errors: {form.errors}')
+
+    form = ProgramedTransactionForm(instance=programed_transaction)
+
+    param_ajax = request.GET.get('ajax')
+    param_next = request.GET.get('next', 'programed_transaction_list')
+
+    url_post = reverse('programed_transaction_form',
+                       args=[pk]) + f'?next={param_next}'
+    url_delete = reverse('programed_transaction_delete',
+                         args=[pk]) + f'?next={param_next}'
+
+    return render(request, 'programed_transaction/programed_transaction_form.html', {'form': form, 'url_post': url_post, 'url_delete': url_delete, 'ajax': param_ajax})
+
+
+def programed_transaction_delete(request, pk):
+    programed_transaction = get_object_or_404(ProgramedTransaction, pk=pk)
+
+    # and request.user.is_authenticated and request.user.username == creator:
+    if request.method == "POST":
+        programed_transaction.delete()
+
+    next = request.GET.get('next', 'programed_transaction_list')
 
     return redirect(next)

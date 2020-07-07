@@ -1,57 +1,58 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils import timezone
 
-from .common.choices import StatusChoises, AccountTypeChoises, MovementTypeChoises, NoYesChoises
+from .common.choices import StatusChoices, AccountTypeChoices, MovementTypeChoices, NoYesChoices, FrequencyChoices
 from .common.models import BaseModel
 
 
 class Account(BaseModel):
     description = models.CharField(max_length=25, null=False, blank=False)
     status = models.IntegerField(
-        choices=StatusChoises.choices, default=StatusChoises.ACTIVE)
+        choices=StatusChoices.choices, default=StatusChoices.ACTIVE)
     type = models.IntegerField(
-        choices=AccountTypeChoises.choices, default=AccountTypeChoises.CA)
+        choices=AccountTypeChoices.choices, default=AccountTypeChoices.CA)
     opening_balance = models.DecimalField(max_digits=10, decimal_places=2)
     opening_type = models.IntegerField(
-        choices=MovementTypeChoises.choices, default=MovementTypeChoises.POSITIVE)
+        choices=MovementTypeChoices.choices, default=MovementTypeChoices.POSITIVE)
     opening_balance_date = models.DateField()
 
     def __str__(self):
         return self.description
 
     def get_status_label(self):
-        return StatusChoises(self.status).label
+        return StatusChoices(self.status).label
 
     def get_type_label(self):
-        return AccountTypeChoises(self.type).label
+        return AccountTypeChoices(self.type).label
 
     def get_opening_type_labe(self):
-        return MovementTypeChoises(self.opening_type).label
+        return MovementTypeChoices(self.opening_type).label
 
 
 class Category(BaseModel):
     description = models.CharField(max_length=25)
     status = models.IntegerField(
-        choices=StatusChoises.choices, default=StatusChoises.ACTIVE)
+        choices=StatusChoices.choices, default=StatusChoices.ACTIVE)
     movement_type = models.IntegerField(
-        choices=MovementTypeChoises.choices, default=MovementTypeChoises.POSITIVE)
+        choices=MovementTypeChoices.choices, default=MovementTypeChoices.POSITIVE)
     is_transaction = models.IntegerField(
-        choices=NoYesChoises.choices, default=int(NoYesChoises.NO))
+        choices=NoYesChoices.choices, default=int(NoYesChoices.NO))
 
     def __str__(self):
         return self.description
 
     def get_status_label(self):
-        return StatusChoises(self.status).label
+        return StatusChoices(self.status).label
 
     def get_movement_type_label(self):
-        return MovementTypeChoises(self.movement_type).label
+        return MovementTypeChoices(self.movement_type).label
 
     def is_expense(self):
-        return self.movement_type == MovementTypeChoises.NEGATIVE
+        return self.movement_type == MovementTypeChoices.NEGATIVE
 
     def is_active(self):
-        return self.status == StatusChoises.ACTIVE
+        return self.status == StatusChoices.ACTIVE
 
 
 class Transaction(BaseModel):
@@ -64,7 +65,7 @@ class Transaction(BaseModel):
     observation = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
-        return '{} - {}'.format(self.description, self.date)
+        return f'({self.account}) {self.description} - {self.date}'
 
 
 class MonthBalance(BaseModel):
@@ -95,3 +96,28 @@ class Transfer(BaseModel):
 
     def __str__(self):
         return f'Transfer from "{self.source}" to "{self.destination}"'
+
+
+class ProgramedTransaction(BaseModel):
+    initial_date = models.DateField(default=timezone.now)
+    account = models.ForeignKey(
+        Account, on_delete=models.PROTECT, related_name='programed_transactions')
+    frequency = models.IntegerField(
+        choices=FrequencyChoices.choices, default=FrequencyChoices.DIARY)
+    value = models.DecimalField(max_digits=15, decimal_places=2, default=0.0)
+    description = models.CharField(max_length=100, null=True, blank=True)
+    observation = models.CharField(max_length=200, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    last_verification = models.DateField(null=True, blank=True)
+    status = models.IntegerField(
+        choices=StatusChoices.choices, default=StatusChoices.ACTIVE)
+    transaction = GenericRelation(Transaction)
+
+    def __str__(self):
+        return self.description
+
+    def get_frequency_label(self):
+        return FrequencyChoices(self.frequency).label
+
+    def get_status_label(self):
+        return StatusChoices(self.status).label

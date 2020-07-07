@@ -2,7 +2,7 @@ from datetime import date
 from django import forms
 from django.forms import ModelForm
 
-from .models import Account, Category, Transaction, Transfer
+from .models import Account, Category, Transaction, Transfer, ProgramedTransaction
 from .fields import DateField  # , CharField, TimeField
 
 
@@ -67,3 +67,13 @@ class TransferForm(ModelForm):
     class Meta:
         model = Transfer
         fields = ['source', 'destination', 'date', 'value', 'description']
+
+
+class ProgramedTransactionForm(ModelForm):
+
+    initial_date = DateField(value=date.today())
+
+    class Meta:
+        model = ProgramedTransaction
+        fields = ['initial_date', 'account', 'frequency', 'value',
+                  'description', 'observation', 'category', 'status']

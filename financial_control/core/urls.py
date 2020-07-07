@@ -23,7 +23,7 @@ urlpatterns = [
             name='api_accounts_statment'),
 
     path('accounts/', views.account_list, name='account_list'),
-    re_path('accounts/new/$', views.account_new, name='account_new'),
+    path('accounts/new', views.account_new, name='account_new'),
     path('accounts/<int:pk>', views.account_form, name='account_form'),
     path('accounts/<int:pk>/delete', views.account_delete, name='account_delete'),
 
@@ -44,4 +44,13 @@ urlpatterns = [
     path('transfers/<int:pk>', views.transfer_form, name='transfer_form'),
     path('transfers/<int:pk>/delete',
          views.transfer_delete, name='transfer_delete'),
+
+    path('programed_transactions/', views.programed_transaction_list,
+         name='programed_transaction_list'),
+    path('programed_transactions/new',
+         views.programed_transaction_new, name='programed_transaction_new'),
+    path('programed_transactions/<int:pk>',
+         views.programed_transaction_form, name='programed_transaction_form'),
+    path('programed_transactions/<int:pk>/delete',
+         views.programed_transaction_delete, name='programed_transaction_delete'),
 ]

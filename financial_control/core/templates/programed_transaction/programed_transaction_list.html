@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card shadow p-3 mb-5 bg-white rounded">
+      <div class="card-header">
+        <h4>Programed Transactions</h4>
+        <a class="btn btn-outline-primary" href="{% url 'programed_transaction_new' %}">+</a>
+      </div>
+      <div class="card-body">
+        {% if programed_transactions %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Initial Date</th>
+              <th scope="col">Account</th>
+              <th scope="col">Frequency</th>
+              <th scope="col">Description</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for programed_transaction in programed_transactions %}
+            <tr class="table-item-link" data-href="{% url 'programed_transaction_form' programed_transaction.id %}">
+              <th scope="row">{{ programed_transaction.id }}</th>
+              <td class="date">{{ programed_transaction.initial_date }}</td>
+              <td class="date">{{ programed_transaction.account }}</td>
+              <td class="date">{{ programed_transaction.get_frequency_label }}</td>
+              <td>{{ programed_transaction }}</td>
+              <td>{{ programed_transaction.get_status_label }}</td>
+            </tr>
+            {% endfor  %}
+          </tbody>
+        </table>
+        {% else %}
+        <div style="display: flex; justify-content: center;">
+          <h6>No data found</h6>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %} {% if programed_transactions.has_other_pages %}
+<nav aria-label="...">
+  <ul class="pagination pagination-sm justify-content-center">
+    <li class="page-item {% if not programed_transactions.has_previous %}disabled{% endif %}">
+      <a class="page-link" href="?page={{ users.previous_page_number }}" aria-label="Anterior">
+        <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">Anterior</span>
+      </a>
+    </li>
+
+    {% for i in programed_transactions.paginator.page_range %}
+    <li class="page-item {% if programed_transactions.number == i %}active{% endif %}">
+      <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+    </li>
+    {% endfor %}
+
+    <li class="page-item {% if not programed_transactions.has_next %}disabled{% endif%}">
+      <a class="page-link" href="?page={{ programed_transactions.next_page_number }}" aria-label="Próximo">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Próximo</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+{% endif %} {% endcomment %}
+
+{% endblock main %}
