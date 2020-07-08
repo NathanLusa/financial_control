@@ -111,8 +111,6 @@ function filter(account_statment) {
     description: account_statment.description,
   })
 
-  console.log(account_statment.description)
-
   fetch(url)
     .then(handleErrors)
     .then(response => response.json())
@@ -176,7 +174,7 @@ function MonthBalanceItem(month_balance) {
             <th scope="row">
               <h5>
                 <span class="badge badge-${month_balance.account.color.toLowerCase()}">${month_balance.account.description}</span>
-              </h5>
+                </h5>
             </th>
             <td class="amount ${amount_class(income)}">R$ ${income.toFixed(2)}</td>
             <td class="amount ${amount_class(expense)}">R$ ${expense.toFixed(2)}</td>
@@ -220,7 +218,11 @@ function TransactionItem(transaction, f_accumulate) {
         data-modal-title="Transaction" 
         data-transaction-id="${transaction.id}">
       <th scope="row" class="date">${transaction.date}</th>
-      <td>${transaction.description} <span class="badge badge-${transaction.account.color.toLowerCase()}">${transaction.account.description}</span></td>
+      <td>
+        ${transaction.description} <br>
+        <span class="badge badge-${transaction.account.color.toLowerCase()}">${transaction.account.description}</span>
+        ${transaction.category ? '<span class="badge badge-secondary">' + transaction.category + '</span>' : ''}
+      </td>
       <td class="amount bold ${amount_class(amount)}">R$ ${amount.toFixed(2)}</td>
       <td class="amount ${amount_class(total)}">R$ ${total.toFixed(2)}</td>
     </tr>
