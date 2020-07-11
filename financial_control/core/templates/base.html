@@ -18,12 +18,13 @@
 </head>
 
 <body>
-  <div class="wrapper">
+  {% include 'includes/components/navbar/navbar.html' %}
 
-    <ul class="sidebar">
-      <div class="sidebar-header">
+  <div class="wrapper">
+    <ul class="sidebar pt-3">
+      <!-- <div class="sidebar-header">
         <a href="{% url 'dashboard' %}" style="color: inherit;"><i class="fas fa-tenge fa-3x"></i></a>
-      </div>
+      </div> -->
 
       {% include 'includes/components/sidebar/sidebar_item.html' with url='dashboard' icon='fa-tachometer-alt' description='Dashboard' %}
       {% include 'includes/components/sidebar/sidebar_item.html' with url='account_list' icon='fa-wallet' description='Accounts' %}
@@ -33,11 +34,14 @@
       {% include 'includes/components/sidebar/sidebar_item.html' with url='programed_transaction_list' icon='fa-project-diagram' description='Prog. Transactions' %}
     </ul>
 
-    <div class="container-fluid content p-4">
+    <div class="container-fluid p-0">
 
-      {% block main %}
-      {% endblock %}
+      <div class="container-fluid content p-4">
 
+        {% block main %}
+        {% endblock %}
+
+      </div>
     </div>
   </div>
 

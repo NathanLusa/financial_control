@@ -11,14 +11,18 @@
 
 
 <!-- Filter -->
-<div class="container-fluid filter shadow p-4 mb-4 bg-white rounded">
-  <buton class="btn btn-primary" id="calendar-prior">&larr;</buton>
-  <input type="month" id="calendar">
-  <buton class="btn btn-primary" id="calendar-next">&rarr;</buton>
+<div class="filter shadow p-4 mb-4 bg-white rounded d-flex">
+  <form class="form-inline my-2 my-lg-0 mr-4">
+    <buton class="btn btn-primary my-2 my-sm-0" id="calendar-prior">&larr;</buton>
+    <input class="form-control mr-sm-1 ml-sm-1" type="month" id="calendar">
+    <buton class="btn btn-primary my-2 my-sm-0" id="calendar-next">&rarr;</buton>
+  </form>
 
   <!-- Description -->
-  <input type="search" placeholder="Search" aria-label="Search" id="filter-description">
-  <button class="btn btn-outline-primary" id="filter-description-button">Search</button>
+  <form class="form-inline my-2 my-lg-0">
+    <input class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search" id="filter-description">
+    <button class="btn btn-outline-primary my-2 my-sm-0" id="filter-description-button">Search</button>
+  </form>
 </div>
 
 <!-- Tables -->
@@ -28,8 +32,8 @@
       <div class="card-header">
         <h4>Accounts</h4>
       </div>
-      <div class="card-body">
-        <table class="table" id="table-accounts">
+      <div class="card-body table-responsive">
+        <table class="table table-centered table-nowrap table-hover mb-0" id="table-accounts">
           <thead>
             <tr>
               <th scope="col">Description</th>
@@ -62,8 +66,8 @@
       <div class="card-header">
         <h4>Month Balance</h4>
       </div>
-      <div class="card-body">
-        <table class="table" id="table-month-balances">
+      <div class="card-body table-responsive">
+        <table class="table table-centered table-nowrap table-hover mb-0" id="table-month-balances">
 
         </table>
       </div>
@@ -97,8 +101,8 @@
           data-target="#modal-dashboard" data-modal-title="Transactions">+</button> -->
 
       </div>
-      <div class="card-body">
-        <table class="table" id="table-transactions">
+      <div class="card-body table-responsive">
+        <table class="table table-centered table-nowrap table-hover mb-0" id="table-transactions">
 
         </table>
       </div>

@@ -59,12 +59,13 @@ body {
 .wrapper {
   display: flex;
   width: 100%;
+  overflow: hidden;
   align-items: stretch;
 }
 
 .content {
   width: 100%;
-  padding: 1rem;
+  // padding: 1rem;
   min-height: 100vh;
   transition: all 0.3s;
   font-size: $content-font-size;
@@ -85,7 +86,7 @@ body {
   margin: 0;
   min-width: $sidebar-width;
   max-width: $sidebar-width;
-  border-top-right-radius: 25px;
+  // border-top-right-radius: 25px;
   border-bottom-right-radius: 25px;
   background-color: $sidebar-bg-color;
   color: $sidebar-icon-color;
@@ -96,24 +97,52 @@ body {
   }
 }
 
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 45px;
+.navbar {
+  // background-color: $sidebar-bg-color;
+  // color: $sidebar-icon-color;
+  font-size: 1.2rem;
 
-  @media (max-width: $sidebar-max-width-reduce) {
-    padding: 45px 0px 45px 0px;
-  }
+  .navbar-brand {
+    @media (max-width: $sidebar-max-width-reduce) {
+      min-width: $sidebar-width-reduce;
+      max-width: $sidebar-width-reduce;
+    }
 
-  i {
-    font-size: 50px;
-  }
+    display: flex;
+    min-width: $sidebar-width;
+    max-width: $sidebar-width;
+    justify-content: center;
+    background-color: $sidebar-bg-color;
+    color: $sidebar-icon-color;
 
-  i:hover {
-    color: #eccb10;
+    i {
+      font-size: 4.5rem;
+    }
+
+    i:hover {
+      color: #eccb10;
+    }
   }
 }
+
+// .sidebar-header {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   padding: 45px;
+
+//   @media (max-width: $sidebar-max-width-reduce) {
+//     padding: 45px 0px 45px 0px;
+//   }
+
+//   i {
+//     font-size: 50px;
+//   }
+
+//   i:hover {
+//     color: #eccb10;
+//   }
+// }
 
 .sidebar-item {
   display: flex;
@@ -215,7 +244,27 @@ td del {
   color: gray;
 }
 
-#filter-description {
-  width: 20rem;
-  margin-left: 1rem;
+// #filter-description {
+//   width: 20rem;
+//   margin-left: 1rem;
+// }
+
+
+.notification-icon-badge {
+  display: inline-block;
+  top: 15px;
+  right: 6px;
+  border-radius: 50%;
+  height: 7px;
+  width: 7px;
+  background-color: #fa5c7c;
+}
+
+.notification-link {
+  display: flex;
+  color: gray;
+
+  &:after {
+    display: none;
+  }
 }
