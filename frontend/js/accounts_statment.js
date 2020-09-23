@@ -222,6 +222,7 @@ function TransactionItem(transaction, f_accumulate) {
         ${transaction.description} <br>
         <span class="badge badge-${transaction.account.color.toLowerCase()}">${transaction.account.description}</span>
         ${transaction.category ? '<span class="badge badge-secondary">' + transaction.category + '</span>' : ''}
+        ${transaction.status ? '<span class="badge badge-' + transaction.status_color + '">' + transaction.status + '</span>' : ''}
       </td>
       <td class="amount bold ${amount_class(amount)}">R$ ${amount.toFixed(2)}</td>
       <td class="amount ${amount_class(total)}">R$ ${total.toFixed(2)}</td>

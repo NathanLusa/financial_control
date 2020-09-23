@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.urls import reverse
 
 from .common import utils, exceptions
-from .common.choices import ColorChoices
+from .common.choices import ColorChoices, StatusTransactionChoices
 from .models import Account, Category, Transaction, MonthBalance, ProgramedTransaction
 
 
@@ -57,6 +57,8 @@ def get_transactions_json(transactions):
             'description': transaction.description,
             'value': transaction.value,
             'category': transaction.category.description,
+            'status': transaction.get_status_label(),
+            'status_color': transaction.get_status_color(),
             'url': url_reverse
         }
         transactions_json.append(item)
@@ -166,7 +168,6 @@ def accounts_statment(request):
 
 
 def notifications(request):
-    print('notifications')
     notifications = []
     programed_transaction_list = ProgramedTransaction.objects.all()
     for prog_transaction in programed_transaction_list:

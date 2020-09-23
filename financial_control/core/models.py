@@ -79,6 +79,23 @@ class Transaction(BaseModel):
     def __str__(self):
         return f'({self.account}) {self.description} - {self.date}'
 
+    def get_status_label(self):
+        return StatusTransactionChoices(self.status).label
+
+    def get_status_color(self):
+        # PENDING = 0, _('Pending')
+        # SCHEDULED = 1, _('Scheduled')
+        # CONFIRMED = 2, _('Confirmed')
+        # CANCELED = 3, _('Canceled')
+
+        switcher = {
+            0: 'info',
+            1: 'warning',
+            2: 'success',
+            3: 'danger'
+        }
+        return switcher[self.status]
+
 
 class MonthBalance(BaseModel):
     account = models.ForeignKey(
