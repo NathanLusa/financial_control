@@ -4,13 +4,14 @@ from rest_framework import routers
 from . import views
 from . import api_views
 from .viewsets import AccountViewSet, CategoryViewSet, TransactionViewSet
-from .url_converter import OptionalIntConverter
+from .url_converter import OptionalIntConverter, DateConverter
 
 router = routers.SimpleRouter()
 router.register(r'accounts', AccountViewSet)
 router.register(r'categories', CategoryViewSet)
 router.register(r'transactions', TransactionViewSet)
 
+register_converter(DateConverter, 'full_date')
 register_converter(OptionalIntConverter, 'optional_int')
 
 
@@ -21,6 +22,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     re_path('api/accounts_statment/$', api_views.accounts_statment,
             name='api_accounts_statment'),
+    path('api/notifications/', api_views.notifications, name='api_notifications'),
 
     path('accounts/', views.account_list, name='account_list'),
     path('accounts/new', views.account_new, name='account_new'),
@@ -53,4 +55,10 @@ urlpatterns = [
          views.programed_transaction_form, name='programed_transaction_form'),
     path('programed_transactions/<int:pk>/delete',
          views.programed_transaction_delete, name='programed_transaction_delete'),
+    path('programed_transactions/<int:pk>/pendings',
+         views.programed_transaction_pending, name='programed_transaction_pending'),
+    path('programed_transactions/<int:pk>/generate/<full_date:date>',
+         views.programed_transaction_generate, name='programed_transaction_generate'),
+    path('programed_transactions/<int:pk>/generate_all',
+         views.programed_transaction_generate_all, name='programed_transaction_generate_all'),
 ]

@@ -1,9 +1,12 @@
+import abc
+from calendar import month, monthrange
+from datetime import date, timedelta
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils import timezone
 
-from .common.choices import StatusChoices, AccountTypeChoices, MovementTypeChoices, NoYesChoices, FrequencyChoices, ColorChoices
-from .common.models import BaseModel
+from .common.choices import StatusChoices, AccountTypeChoices, MovementTypeChoices, NoYesChoices, FrequencyChoices, ColorChoices, StatusTransactionChoices
+from .common.models import BaseModel, ObjectFactory
 
 
 class Account(BaseModel):
@@ -68,6 +71,10 @@ class Transaction(BaseModel):
         Account, on_delete=models.PROTECT, related_name='transactions')
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     observation = models.CharField(max_length=200, null=True, blank=True)
+    status = models.IntegerField(
+        choices=StatusTransactionChoices.choices, default=StatusTransactionChoices.CONFIRMED)
+    programed_transaction = models.ForeignKey(
+        "ProgramedTransaction", on_delete=models.CASCADE, related_name='transactions', null=True, blank=True)
 
     def __str__(self):
         return f'({self.account}) {self.description} - {self.date}'
@@ -116,7 +123,6 @@ class ProgramedTransaction(BaseModel):
     last_verification = models.DateField(null=True, blank=True)
     status = models.IntegerField(
         choices=StatusChoices.choices, default=StatusChoices.ACTIVE)
-    transaction = GenericRelation(Transaction)
 
     def __str__(self):
         return self.description
@@ -126,3 +132,111 @@ class ProgramedTransaction(BaseModel):
 
     def get_status_label(self):
         return StatusChoices(self.status).label
+
+    def has_pendings(self):
+        transactions = self.get_pending_transactions()
+        return len(transactions) > 0
+
+    def generate_transaction(self, dt):
+        generator = self.Generator(self)
+        transactions = generator.get_transactions(dt)
+
+        for transaction in transactions:
+            transaction.save()
+
+    def get_pending_transactions(self):
+        today = date.today()
+        pendings = []
+
+        if (self.last_verification or (today + timedelta(-1))) < today and self.initial_date < today:
+            generator = self.Generator(self)
+            pendings = generator.get_transactions(timedelta(days=1))
+
+        return pendings
+
+    class Generator:
+        def __init__(self, programed_transaction):
+            self.programed_transaction = programed_transaction
+            self.factory = ObjectFactory()
+            self._register()
+
+        def _register(self):
+            self.factory.register_builder(
+                FrequencyChoices.DIARY, self.DiaryGenerator)
+            self.factory.register_builder(
+                FrequencyChoices.WEEKLY, self.WeeklyGenerator)
+            self.factory.register_builder(
+                FrequencyChoices.MONTHLY, self.MonthlyGenerator)
+            self.factory.register_builder(
+                FrequencyChoices.YEARLY, self.YearlyGenerator)
+
+        def get_transactions(self, dt):
+            frequency = FrequencyChoices(self.programed_transaction.frequency)
+            builder = self.factory.create(frequency)
+
+            return builder.generate(self.programed_transaction, dt)
+
+        class BaseGenerator:
+            def get_next_day(self, day):
+                pass
+
+            def generate(self, programed_transaction, dt):
+                transaction_list = []
+                min_date = timedelta(days=1)
+                day = programed_transaction.initial_date
+
+                while day <= date.today():
+                    if (dt == min_date) or (day == dt.date()):
+                        transactions = programed_transaction.transactions.filter(
+                            date=day)
+                        if transactions.count() == 0:
+                            transaction = Transaction(
+                                value=programed_transaction.value,
+                                date=day,
+                                description=programed_transaction.description,
+                                observation=programed_transaction.observation,
+                                account=programed_transaction.account,
+                                category=programed_transaction.category,
+                                status=StatusTransactionChoices.PENDING,
+                                programed_transaction=programed_transaction
+                            )
+                            transaction_list.append(transaction)
+
+                    day = self.get_next_day(day)
+
+                return transaction_list
+
+        class DiaryGenerator(BaseGenerator):
+            def get_next_day(self, day):
+                return day + timedelta(days=1)
+
+            def generate(self, programed_transaction, dt):
+                return super().generate(programed_transaction, dt)
+
+        class WeeklyGenerator(BaseGenerator):
+            def get_next_day(self, day):
+                return day + timedelta(days=7)
+
+            def generate(self, programed_transaction, dt):
+                return super().generate(programed_transaction, dt)
+
+        class MonthlyGenerator(BaseGenerator):
+            def get_next_day(self, day):
+                year = day.year
+                month = day.month + 1
+                if month > 12:
+                    month = 1
+                    year += 1
+
+                days_in_month = monthrange(year, month)[1]
+                return day + timedelta(days=days_in_month)
+
+            def generate(self, programed_transaction, dt):
+                return super().generate(programed_transaction, dt)
+
+        class YearlyGenerator(BaseGenerator):
+            def get_next_day(self, day):
+                return day.replace(year=day.year + 1)
+
+            def generate(self, programed_transaction, dt):
+                return super().generate(programed_transaction, dt)

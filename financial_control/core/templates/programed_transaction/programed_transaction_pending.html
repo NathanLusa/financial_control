@@ -1,0 +1,73 @@
+{% extends ajax|yesno:'base_ajax.html,base.html' %}
+
+{% load static %}
+
+{% block main %}
+
+{% comment %} <div {% if not ajax %}class="container-fluid bg-white p-4" {% endif %}> {% endcomment %}
+
+  {% comment %} <h1>Programed transaction pending</h1> {% endcomment %}
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card shadow p-3 mb-5 bg-white rounded">
+        <div class="card-header">
+          <h4>Programed Transactions Pending</h4>
+          {% if transactions %}
+          {% with transactions|first as first_transaction %}
+          <a class="notification-link"
+            href="{% url 'programed_transaction_generate_all' pk=first_transaction.programed_transaction.id %}">
+            <i class="fas fa-cogs fa-2x"></i>
+          </a>
+          {% endwith %}
+          {% endif %}
+        </div>
+
+        <div class="card-body">
+          {% if transactions %}
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Account</th>
+                <th scope="col">Date</th>
+                <th scope="col">Description</th>
+                <th scope="col">Value</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for transaction in transactions %}
+              <tr {% if transaction.id > 0 %} class="table-item-link"
+                data-href="{% url 'transaction_form' transaction.id %}" {% endif %}>
+                <th scope="row">{% if transaction.id > 0 %} {{ transaction.id }} {% endif %}</th>
+                <td>{{ transaction.account }}</td>
+                <td class="date">{{ transaction.date }}</td>
+                <td>{{ transaction.description }}</td>
+                <td>{{ transaction.value }}</td>
+                <td>{{ transaction.status }}</td>
+                <td>
+                  <a class="notification-link"
+                    href="{% url 'programed_transaction_generate' pk=transaction.programed_transaction.id date=transaction.date %}">
+                    <i class="fas fa-cogs fa-2x"></i>
+                  </a>
+                </td>
+              </tr>
+              {% endfor  %}
+            </tbody>
+          </table>
+          {% else %}
+          <div style="display: flex; justify-content: center;">
+            <h6>No data found</h6>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% comment %}
+  </div> {% endcomment %}
+
+
+</div>
+{% endblock main %}

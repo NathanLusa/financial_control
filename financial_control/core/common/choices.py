@@ -52,3 +52,10 @@ class ColorChoices(IntegerChoices):
     INFO = 5, _('Info')
     LIGHT = 6, _('Light')
     DARK = 7, _('Dark')
+
+
+class StatusTransactionChoices(IntegerChoices):
+    PENDING = 0, _('Pending')
+    SCHEDULED = 1, _('Scheduled')
+    CONFIRMED = 2, _('Confirmed')
+    CANCELED = 3, _('Canceled')

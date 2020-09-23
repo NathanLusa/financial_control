@@ -1,4 +1,5 @@
 import decimal
+from datetime import timedelta
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -41,6 +42,7 @@ def dashboard(request):
     accounts = Account.objects.filter(status=StatusChoices.ACTIVE)
     years = range(2015, 2021)
     months = range(1, 13)
+
     return render(request, 'dashboard.html', {'accounts': accounts, 'years': years, 'months': months})
 
 
@@ -329,3 +331,21 @@ def programed_transaction_delete(request, pk):
     next = request.GET.get('next', 'programed_transaction_list')
 
     return redirect(next)
+
+
+def programed_transaction_pending(request, pk):
+    programed_transaction = get_object_or_404(ProgramedTransaction, pk=pk)
+    transaction_list = programed_transaction.get_pending_transactions()
+
+    return render(request, 'programed_transaction/programed_transaction_pending.html', {'transactions': transaction_list})
+
+
+def programed_transaction_generate(request, pk, date):
+    programed_transaction = get_object_or_404(ProgramedTransaction, pk=pk)
+    programed_transaction.generate_transaction(date)
+
+    return redirect('programed_transaction_pending', pk)
+
+
+def programed_transaction_generate_all(request, pk):
+    return programed_transaction_generate(request, pk, timedelta(days=1))

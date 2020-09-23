@@ -22,6 +22,7 @@
               <th scope="col">Frequency</th>
               <th scope="col">Description</th>
               <th scope="col">Status</th>
+              <th scope="col">Pendings</th>
             </tr>
           </thead>
           <tbody>
@@ -33,6 +34,14 @@
               <td class="date">{{ programed_transaction.get_frequency_label }}</td>
               <td>{{ programed_transaction }}</td>
               <td>{{ programed_transaction.get_status_label }}</td>
+              <td>
+                {% if programed_transaction.has_pendings %}
+                <a class="notification-link" href="{% url 'programed_transaction_pending' programed_transaction.id %}">
+                  <i class="fas fa-bell fa-2x"></i>
+                  <!-- <span class="notification-icon-badge"></span> -->
+                </a>
+                {% endif %}
+              </td>
             </tr>
             {% endfor  %}
           </tbody>

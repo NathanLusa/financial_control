@@ -1,13 +1,11 @@
 {
-  "sqltools.connections": [
-    {
-      "database": "${workspaceFolder:financial_control_django}/financial_control/db.sqlite3",
-      "driver": "SQLite",
-      "name": "financial_control",
-      "previewLimit": 50
-    }
-  ],
+  "sqltools.connections": [{
+    "database": "${workspaceFolder:financial_control_django}/financial_control/db.sqlite3",
+    "driver": "SQLite",
+    "name": "financial_control",
+    "previewLimit": 50
+  }],
   "sqltools.useNodeRuntime": true,
-  "debug.node.autoAttach": "off",
-  "python.pythonPath": "venv/bin/python"
+  "debug.node.autoAttach": "on",
+  "python.pythonPath": "venv/bin/python",
 }

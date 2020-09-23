@@ -48,8 +48,8 @@ class TransactionForm(ModelForm):
 
     class Meta:
         model = Transaction
-        fields = ['account', 'date', 'value',
-                  'description', 'observation', 'category']
+        fields = ['account', 'date', 'value', 'description',
+                  'observation', 'category', 'status']
 
     # value = models.DecimalField(max_digits=10, decimal_places=2)
     # date = models.DateField()

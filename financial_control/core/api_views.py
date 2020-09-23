@@ -9,7 +9,7 @@ from django.urls import reverse
 
 from .common import utils, exceptions
 from .common.choices import ColorChoices
-from .models import Account, Category, Transaction, MonthBalance
+from .models import Account, Category, Transaction, MonthBalance, ProgramedTransaction
 
 
 def get_parameters_account_statments(request):
@@ -163,3 +163,20 @@ def accounts_statment(request):
     except exceptions.ConverterError as ce:
         print('Erro de conversão')
         return JsonResponse({'error': ce.error, 'message': ce.message}, status=ce.error)
+
+
+def notifications(request):
+    print('notifications')
+    notifications = []
+    programed_transaction_list = ProgramedTransaction.objects.all()
+    for prog_transaction in programed_transaction_list:
+        if prog_transaction.has_pendings():
+            notifications.append({
+                'description': prog_transaction.description,
+                'url': reverse('programed_transaction_pending', args=[prog_transaction.id])
+            })
+
+    data = {
+        'notifications': notifications
+    }
+    return JsonResponse(data)
