@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card shadow p-3 mb-5 bg-white rounded">
+      <div class="card-header">
+        <h4>Transactions</h4>
+        <a class="btn btn-outline-primary" href="{% url 'transaction_new' %}">+</a>
+      </div>
+      <div class="card-body">
+        {% if transactions %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Date</th>
+              <th scope="col">Description</th>
+              <th scope="col">Value</th>
+              <th scope="col">Status</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for transaction in transactions %}
+            <tr class="table-item-link"
+              data-href="{% url 'transaction_form' transaction.id %}{% if next_url %}?next={{ next_url }}{% endif %}">
+              <th scope="row">{{ transaction.id }}</th>
+              <td class="date">{{ transaction.date }}</td>
+              <td>{{ transaction.description }}</td>
+              <td>{{ transaction.value }}</td>
+              <td>{{ transaction.get_status_label }}</td>
+              <td>
+                {% if transaction.is_pending %}
+                <a
+                  href="{% url 'transaction_confirm' transaction.id %}{% if next_url %}?next={{ next_url }}{% endif %}">
+                  <i class="fas fa-check fa-2x"></i>
+                </a>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor  %}
+          </tbody>
+        </table>
+        {% else %}
+        <div style="display: flex; justify-content: center;">
+          <h6>No data found</h6>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

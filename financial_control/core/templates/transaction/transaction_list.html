@@ -4,44 +4,7 @@
 
 {% block main %}
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="card shadow p-3 mb-5 bg-white rounded">
-      <div class="card-header">
-        <h4>Transactions</h4>
-        <a class="btn btn-outline-primary" href="{% url 'transaction_new' %}">+</a>
-      </div>
-      <div class="card-body">
-        {% if transactions %}
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Date</th>
-              <th scope="col">Description</th>
-              <th scope="col">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for transaction in transactions %}
-            <tr class="table-item-link" data-href="{% url 'transaction_form' transaction.id %}">
-              <th scope="row">{{ transaction.id }}</th>
-              <td class="date">{{ transaction.date }}</td>
-              <td>{{ transaction.description }}</td>
-              <td>{{ transaction.get_status_label }}</td>
-            </tr>
-            {% endfor  %}
-          </tbody>
-        </table>
-        {% else %}
-        <div style="display: flex; justify-content: center;">
-          <h6>No data found</h6>
-        </div>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</div>
+{% include 'includes/transaction/list.html' with transactions=transactions %}
 
 {% if transactions.has_other_pages %}
 <nav aria-label="...">

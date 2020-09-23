@@ -43,7 +43,7 @@ class Category(BaseModel):
     status = models.IntegerField(
         choices=StatusChoices.choices, default=StatusChoices.ACTIVE)
     movement_type = models.IntegerField(
-        choices=MovementTypeChoices.choices, default=MovementTypeChoices.POSITIVE)
+        choices=MovementTypeChoices.choices, default=MovementTypeChoices.NEGATIVE)
     is_transaction = models.IntegerField(
         choices=NoYesChoices.choices, default=int(NoYesChoices.NO))
 
@@ -68,7 +68,7 @@ class Transaction(BaseModel):
     date = models.DateField()
     description = models.CharField(max_length=100, null=True, blank=True)
     account = models.ForeignKey(
-        Account, on_delete=models.PROTECT, related_name='transactions')
+        Account, on_delete=models.CASCADE, related_name='transactions')
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     observation = models.CharField(max_length=200, null=True, blank=True)
     status = models.IntegerField(
@@ -83,11 +83,6 @@ class Transaction(BaseModel):
         return StatusTransactionChoices(self.status).label
 
     def get_status_color(self):
-        # PENDING = 0, _('Pending')
-        # SCHEDULED = 1, _('Scheduled')
-        # CONFIRMED = 2, _('Confirmed')
-        # CANCELED = 3, _('Canceled')
-
         switcher = {
             0: 'info',
             1: 'warning',
@@ -95,6 +90,9 @@ class Transaction(BaseModel):
             3: 'danger'
         }
         return switcher[self.status]
+
+    def is_pending(self):
+        return self.status == StatusTransactionChoices.PENDING
 
 
 class MonthBalance(BaseModel):
@@ -130,7 +128,7 @@ class Transfer(BaseModel):
 class ProgramedTransaction(BaseModel):
     initial_date = models.DateField(default=timezone.now)
     account = models.ForeignKey(
-        Account, on_delete=models.PROTECT, related_name='programed_transactions')
+        Account, on_delete=models.CASCADE, related_name='programed_transactions')
     frequency = models.IntegerField(
         choices=FrequencyChoices.choices, default=FrequencyChoices.DIARY)
     value = models.DecimalField(max_digits=15, decimal_places=2, default=0.0)
@@ -154,6 +152,13 @@ class ProgramedTransaction(BaseModel):
         transactions = self.get_pending_transactions()
         return len(transactions) > 0
 
+    def get_date_to_validate(self):
+        today = date.today()
+        date_to_validate = today.replace(
+            day=monthrange(today.year, today.month)[1])
+
+        return date_to_validate
+
     def generate_transaction(self, dt):
         generator = self.Generator(self)
         transactions = generator.get_transactions(dt)
@@ -162,10 +167,9 @@ class ProgramedTransaction(BaseModel):
             transaction.save()
 
     def get_pending_transactions(self):
-        today = date.today()
+        date_to_validate = self.get_date_to_validate()
         pendings = []
-
-        if (self.last_verification or (today + timedelta(-1))) < today and self.initial_date < today:
+        if (self.last_verification or (date_to_validate + timedelta(-1))) < date_to_validate and self.initial_date < date_to_validate:
             generator = self.Generator(self)
             pendings = generator.get_transactions(timedelta(days=1))
 
@@ -201,8 +205,9 @@ class ProgramedTransaction(BaseModel):
                 transaction_list = []
                 min_date = timedelta(days=1)
                 day = programed_transaction.initial_date
+                date_to_validade = programed_transaction.get_date_to_validate()
 
-                while day <= date.today():
+                while day <= date_to_validade:
                     if (dt == min_date) or (day == dt.date()):
                         transactions = programed_transaction.transactions.filter(
                             date=day)
@@ -239,13 +244,7 @@ class ProgramedTransaction(BaseModel):
 
         class MonthlyGenerator(BaseGenerator):
             def get_next_day(self, day):
-                year = day.year
-                month = day.month + 1
-                if month > 12:
-                    month = 1
-                    year += 1
-
-                days_in_month = monthrange(year, month)[1]
+                days_in_month = monthrange(day.year, day.month)[1]
                 return day + timedelta(days=days_in_month)
 
             def generate(self, programed_transaction, dt):

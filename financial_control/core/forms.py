@@ -44,7 +44,7 @@ class CategoryForm(ModelForm):
 
 class TransactionForm(ModelForm):
 
-    date = DateField(value=date.today())
+    date = DateField()
 
     class Meta:
         model = Transaction
@@ -62,7 +62,7 @@ class TransactionForm(ModelForm):
 
 class TransferForm(ModelForm):
 
-    date = DateField(value=date.today())
+    date = DateField()
 
     class Meta:
         model = Transfer
@@ -71,7 +71,7 @@ class TransferForm(ModelForm):
 
 class ProgramedTransactionForm(ModelForm):
 
-    initial_date = DateField(value=date.today())
+    initial_date = DateField()
 
     class Meta:
         model = ProgramedTransaction

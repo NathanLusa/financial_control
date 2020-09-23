@@ -9,7 +9,7 @@ from .forms import AccountForm, CategoryForm, TransactionForm, TransferForm, Pro
 from .models import Account, Category, Transaction, MonthBalance, Transfer, ProgramedTransaction
 
 from .common import utils
-from .common.choices import NoYesChoices, StatusChoices
+from .common.choices import NoYesChoices, StatusChoices, StatusTransactionChoices
 
 
 def index(request):
@@ -54,18 +54,13 @@ def account_list(request):
 
 def account_new(request):
     if request.method == 'POST':
-        next = request.GET.get('next', 'account_list')
         form = AccountForm(request.POST)
         if form.is_valid():
             form.save()
-
-            return redirect(next)
+            return redirect('account_list')
 
     form = AccountForm()
-    param_ajax = request.GET.get('ajax')
-    url_post = reverse('account_new')
-    param_next = request.GET.get('next')
-    return render(request, 'account/account_form.html', {'form': form, 'url_post': url_post, 'ajax': param_ajax, 'next': param_next})
+    return render(request, 'account/account_form.html', {'form': form})
 
 
 def account_form(request, pk):
@@ -203,6 +198,18 @@ def transaction_delete(request, pk):
     return redirect(next)
 
 
+def transaction_confirm(request, pk):
+    transaction = get_object_or_404(Transaction, pk=pk)
+
+    # if request.method == "POST":
+    transaction.status = StatusTransactionChoices.CONFIRMED
+    transaction.save()
+
+    next = request.GET.get('next', 'transaction_list')
+
+    return redirect(next)
+
+
 def transfer_list(request):
     transfers = Transfer.objects.all().order_by('-id')
 
@@ -309,6 +316,8 @@ def programed_transaction_form(request, pk):
             print(f'errors: {form.errors}')
 
     form = ProgramedTransactionForm(instance=programed_transaction)
+    transactions = Transaction.objects.filter(
+        programed_transaction=programed_transaction)
 
     param_ajax = request.GET.get('ajax')
     param_next = request.GET.get('next', 'programed_transaction_list')
@@ -318,7 +327,16 @@ def programed_transaction_form(request, pk):
     url_delete = reverse('programed_transaction_delete',
                          args=[pk]) + f'?next={param_next}'
 
-    return render(request, 'programed_transaction/programed_transaction_form.html', {'form': form, 'url_post': url_post, 'url_delete': url_delete, 'ajax': param_ajax})
+    context = {
+        'form': form,
+        'transactions': transactions,
+        'url_post': url_post,
+        'url_delete': url_delete,
+        'ajax': param_ajax,
+        'pk': pk,
+        'has_pendings': programed_transaction.has_pendings()
+    }
+    return render(request, 'programed_transaction/programed_transaction_form.html', context)
 
 
 def programed_transaction_delete(request, pk):
