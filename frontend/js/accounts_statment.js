@@ -292,7 +292,7 @@ function setDefaults() {
   setAccountsSelected(account_statment.accounts)
 }
 
-const accounts_input = document.querySelector('#table-accounts').querySelectorAll('input');
+const accounts_input = document.querySelector('#accounts').querySelectorAll('input');
 const account_statment = get_account_statment_main();
 const modal_dashboard = document.getElementById("modal-dashboard")
 const modal_title = modal_dashboard.querySelector(".modal-title")

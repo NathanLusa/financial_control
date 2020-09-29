@@ -12,6 +12,27 @@
 
 <!-- Filter -->
 <div class="filter shadow p-4 mb-4 bg-white rounded d-flex">
+  <!-- Accounts -->
+  <div class="btn-group mr-4">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+      aria-expanded="false">
+      Accounts
+    </button>
+    <div class="dropdown-menu" id="accounts">
+      {% for account in accounts %}
+      <div class="custom-control custom-checkbox ml-3">
+        <input type="checkbox" class="custom-control-input" id="{{account.id}}" checked>
+        <label class="custom-control-label" for="{{account.id}}">
+          <h5>
+            <span class="badge badge-{{account.get_color_label|lower}}">{{account.description}}</span>
+          </h5>
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Period -->
   <form class="form-inline my-2 my-lg-0 mr-4">
     <buton class="btn btn-primary my-2 my-sm-0" id="calendar-prior">&larr;</buton>
     <input class="form-control mr-sm-1 ml-sm-1" type="month" id="calendar">
@@ -27,41 +48,8 @@
 
 <!-- Tables -->
 <div class="row">
-  <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
-    <div class="card shadow p-3 mb-5 bg-white rounded">
-      <div class="card-header">
-        <h4>Accounts</h4>
-      </div>
-      <div class="card-body table-responsive">
-        <table class="table table-centered table-nowrap table-hover mb-0" id="table-accounts">
-          <thead>
-            <tr>
-              <th scope="col">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for account in accounts %}
-            <tr>
-              <th>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="{{account.id}}" checked>
-                  <label class="custom-control-label" for="{{account.id}}">
-                    <h5>
-                      <span class="badge badge-{{account.get_color_label|lower}}">{{account.description}}</span>
-                    </h5>
-                  </label>
-                </div>
-              </th>
-              <td>{{account.value}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+  <!-- Table Month Balance -->
+  <div class="col-12">
     <div class="card shadow p-3 mb-5 bg-white rounded">
       <div class="card-header">
         <h4>Month Balance</h4>
@@ -75,6 +63,7 @@
   </div>
 </div>
 
+<!-- Table Transactions -->
 <div class="row">
   <!-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-8"> -->
   <div class="col">
@@ -114,4 +103,9 @@
 
 {% block script %}
 <script type="module" src="{% static 'js/accounts_statment.js' %}"></script>
+<script>
+  document.getElementById("accounts").addEventListener('click', function (event) {
+    event.stopPropagation();
+  });
+</script>
 {% endblock script %}

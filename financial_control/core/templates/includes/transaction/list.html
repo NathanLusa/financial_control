@@ -3,7 +3,9 @@
     <div class="card shadow p-3 mb-5 bg-white rounded">
       <div class="card-header">
         <h4>Transactions</h4>
+        {% if show_new_button %}
         <a class="btn btn-outline-primary" href="{% url 'transaction_new' %}">+</a>
+        {% endif %}
       </div>
       <div class="card-body">
         {% if transactions %}
