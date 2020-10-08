@@ -6,6 +6,6 @@
     "previewLimit": 50
   }],
   "sqltools.useNodeRuntime": true,
-  "debug.node.autoAttach": "on",
+  "debug.node.autoAttach": "off",
   "python.pythonPath": "venv/bin/python",
 }

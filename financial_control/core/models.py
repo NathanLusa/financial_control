@@ -5,6 +5,9 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils import timezone
 
+# from django_print_sql import print_sql_decorator
+# @print_sql_decorator(count_only=False)
+
 from .common.choices import StatusChoices, AccountTypeChoices, MovementTypeChoices, NoYesChoices, FrequencyChoices, ColorChoices, StatusTransactionChoices
 from .common.models import BaseModel, ObjectFactory
 
@@ -180,6 +183,8 @@ class ProgramedTransaction(BaseModel):
             self.programed_transaction = programed_transaction
             self.factory = ObjectFactory()
             self._register()
+            self._transactions = list(Transaction.objects.filter(
+                programed_transaction=programed_transaction))
 
         def _register(self):
             self.factory.register_builder(
@@ -193,11 +198,15 @@ class ProgramedTransaction(BaseModel):
 
         def get_transactions(self, dt):
             frequency = FrequencyChoices(self.programed_transaction.frequency)
-            builder = self.factory.create(frequency)
+            builder = self.factory.create(
+                frequency, transactions=self._transactions)
 
             return builder.generate(self.programed_transaction, dt)
 
         class BaseGenerator:
+            def __init__(self, transactions):
+                self._transactions = transactions
+
             def get_next_day(self, day):
                 pass
 
@@ -209,9 +218,9 @@ class ProgramedTransaction(BaseModel):
 
                 while day <= date_to_validade:
                     if (dt == min_date) or (day == dt.date()):
-                        transactions = programed_transaction.transactions.filter(
-                            date=day)
-                        if transactions.count() == 0:
+                        transaction = [
+                            t for t in self._transactions if t.date == day]
+                        if not transaction:
                             transaction = Transaction(
                                 value=programed_transaction.value,
                                 date=day,
@@ -223,6 +232,7 @@ class ProgramedTransaction(BaseModel):
                                 programed_transaction=programed_transaction
                             )
                             transaction_list.append(transaction)
+                            self._transactions.append(transaction)
 
                     day = self.get_next_day(day)
 
