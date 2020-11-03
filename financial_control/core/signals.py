@@ -5,7 +5,34 @@ from django.dispatch import receiver
 
 from .common.choices import MovementTypeChoices, NoYesChoices
 from .common.utils import last_day_month, first_day_month
-from .models import Transaction, MonthBalance, Transfer, Category
+from .models import Account, Transaction, MonthBalance, Transfer, Category
+
+
+@receiver(post_save, sender=Account)
+def set_initial_transaction(instance, created, **kwargs):
+    movement_type = MovementTypeChoices.POSITIVE if instance.opening_balance >= 0 else MovementTypeChoices.NEGATIVE
+    category = Category.objects.filter(
+        is_opening_balance=NoYesChoices.YES, movement_type=movement_type).first()
+
+    if not created and instance.initial_transaction:
+        initial_transaction = instance.initial_transaction
+        initial_transaction.value = instance.opening_balance
+        initial_transaction.date = instance.opening_balance_date
+        initial_transaction.category = category
+        initial_transaction.save()
+        return
+
+    initial_transaction = Transaction()
+    initial_transaction.value = decimal.Decimal(instance.opening_balance)
+    initial_transaction.date = instance.opening_balance_date
+    initial_transaction.description = 'OPENING BALANCE'
+    initial_transaction.account = instance
+    initial_transaction.category = category
+    initial_transaction.save()
+
+    instance.initial_transaction = initial_transaction
+
+    instance.save()
 
 
 @receiver(post_save, sender=Transaction)

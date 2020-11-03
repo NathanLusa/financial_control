@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-from .models import Account, Category, Transaction
+from .models import Account, Category, Transaction, Transfer
 
 
 class BaseModelSerializer(serializers.ModelSerializer):
@@ -51,6 +51,12 @@ class TransactionSerializer(BaseModelSerializer):
         model = Transaction
         fields = '__all__'
         # create_fields_verify = ['description', 'date', 'value', 'account']
+
+
+class TransferSerializer(BaseModelSerializer):
+    class Meta:
+        model = Transfer
+        fields = ['source', 'destination', 'date', 'value', 'description']
 
 
 class AccountDashboardSerializer(serializers.Serializer):

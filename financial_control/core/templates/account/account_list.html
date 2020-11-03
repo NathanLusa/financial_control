@@ -21,6 +21,7 @@
               <th scope="col">Status</th>
               <th scope="col">Type</th>
               <th scope="col">Opening Balance</th>
+              <th scope="col">Initial transaction</th>
             </tr>
           </thead>
           <tbody>
@@ -31,6 +32,7 @@
               <td>{{ account.get_status_label }}</td>
               <td>{{ account.get_type_label }}</td>
               <td>{{ account.opening_balance }}</td>
+              <td>{{ account.initial_transaction.description }}</td>
             </tr>
             {% endfor  %}
           </tbody>

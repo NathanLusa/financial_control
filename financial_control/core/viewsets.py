@@ -2,8 +2,8 @@
 # from rest_framework.response import Response
 
 from .common.viewsets import BaseModelViewSetMultiCreate
-from .models import Account, Category, Transaction
-from .serializers import AccountSerializer, CategorySerializer, TransactionSerializer
+from .models import Account, Category, Transaction, Transfer
+from .serializers import AccountSerializer, CategorySerializer, TransactionSerializer, TransferSerializer
 
 
 class AccountViewSet(BaseModelViewSetMultiCreate):
@@ -27,3 +27,8 @@ class CategoryViewSet(BaseModelViewSetMultiCreate):
 class TransactionViewSet(BaseModelViewSetMultiCreate):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+
+
+class TransferViewSet(BaseModelViewSetMultiCreate):
+    queryset = Transfer.objects.all()
+    serializer_class = TransferSerializer

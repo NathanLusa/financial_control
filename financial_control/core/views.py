@@ -87,7 +87,8 @@ def account_delete(request, pk):
 
 def category_list(request):
     categories = Category.objects.all().exclude(
-        is_transaction=NoYesChoices.YES).order_by('description', 'id')
+        is_transaction=NoYesChoices.YES).exclude(
+        is_opening_balance=NoYesChoices.YES).order_by('description', 'id')
 
     return render(request, 'category/category_list.html', {'categories': categories})
 

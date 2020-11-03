@@ -3,13 +3,14 @@ from rest_framework import routers
 
 from . import views
 from . import api_views
-from .viewsets import AccountViewSet, CategoryViewSet, TransactionViewSet
+from .viewsets import AccountViewSet, CategoryViewSet, TransactionViewSet, TransferViewSet
 from .url_converter import OptionalIntConverter, DateConverter
 
 router = routers.SimpleRouter()
 router.register(r'accounts', AccountViewSet)
 router.register(r'categories', CategoryViewSet)
 router.register(r'transactions', TransactionViewSet)
+router.register(r'transfers', TransferViewSet)
 
 register_converter(DateConverter, 'full_date')
 register_converter(OptionalIntConverter, 'optional_int')

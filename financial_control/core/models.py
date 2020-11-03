@@ -1,12 +1,7 @@
-import abc
 from calendar import month, monthrange
 from datetime import date, timedelta
-from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils import timezone
-
-# from django_print_sql import print_sql_decorator
-# @print_sql_decorator(count_only=False)
 
 from .common.choices import StatusChoices, AccountTypeChoices, MovementTypeChoices, NoYesChoices, FrequencyChoices, ColorChoices, StatusTransactionChoices
 from .common.models import BaseModel, ObjectFactory
@@ -18,12 +13,14 @@ class Account(BaseModel):
         choices=StatusChoices.choices, default=StatusChoices.ACTIVE)
     type = models.IntegerField(
         choices=AccountTypeChoices.choices, default=AccountTypeChoices.CA)
-    opening_balance = models.DecimalField(max_digits=10, decimal_places=2)
+    opening_balance = models.DecimalField(max_digits=15, decimal_places=2)
     opening_type = models.IntegerField(
         choices=MovementTypeChoices.choices, default=MovementTypeChoices.POSITIVE)
     opening_balance_date = models.DateField()
     color = models.IntegerField(
         choices=ColorChoices.choices, default=ColorChoices.PRIMARY)
+    initial_transaction = models.OneToOneField(
+        'Transaction', on_delete=models.CASCADE, related_name='initial_transaction', null=True)
 
     def __str__(self):
         return self.description
@@ -48,6 +45,8 @@ class Category(BaseModel):
     movement_type = models.IntegerField(
         choices=MovementTypeChoices.choices, default=MovementTypeChoices.NEGATIVE)
     is_transaction = models.IntegerField(
+        choices=NoYesChoices.choices, default=int(NoYesChoices.NO))
+    is_opening_balance = models.IntegerField(
         choices=NoYesChoices.choices, default=int(NoYesChoices.NO))
 
     def __str__(self):
@@ -80,7 +79,7 @@ class Transaction(BaseModel):
         "ProgramedTransaction", on_delete=models.CASCADE, related_name='transactions', null=True, blank=True)
 
     def __str__(self):
-        return f'({self.account}) {self.description} - {self.date}'
+        return f'({self.account}) {self.description} - {self.date} - ${self.value}'
 
     def get_status_label(self):
         return StatusTransactionChoices(self.status).label
