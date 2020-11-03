@@ -5,8 +5,8 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from .forms import AccountForm, CategoryForm, TransactionForm, TransferForm, ProgramedTransactionForm
-from .models import Account, Category, Transaction, MonthBalance, Transfer, ProgramedTransaction
+from .forms import AccountForm, CategoryForm, TransactionForm, TransferForm, ProgramedTransactionForm, CreditCardForm
+from .models import Account, Category, Transaction, MonthBalance, Transfer, ProgramedTransaction, CreditCard
 
 from .common import utils
 from .common.choices import NoYesChoices, StatusChoices, StatusTransactionChoices
@@ -368,3 +368,44 @@ def programed_transaction_generate(request, pk, date):
 
 def programed_transaction_generate_all(request, pk):
     return programed_transaction_generate(request, pk, timedelta(days=1))
+
+
+def credit_card_list(request):
+    credit_cards = CreditCard.objects.all()
+
+    return render(request, 'credit_card/credit_card_list.html', {'credit_cards': credit_cards})
+
+
+def credit_card_new(request):
+    if request.method == 'POST':
+        form = CreditCardForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('credit_card_list')
+
+    form = CreditCardForm()
+    return render(request, 'credit_card/credit_card_form.html', {'form': form})
+
+
+def credit_card_form(request, pk):
+    credit_card = get_object_or_404(CreditCard, pk=pk)
+    if request.method == 'POST':
+        form = CreditCardForm(request.POST, instance=credit_card)
+        if form.is_valid():
+            form.save()
+            return redirect('credit_card_list')
+
+    form = CreditCardForm(instance=credit_card)
+    return render(request, 'credit_card/credit_card_form.html', {'form': form, 'id': pk})
+
+
+def credit_card_delete(request, pk):
+    credit_card = get_object_or_404(CreditCard, pk=pk)
+
+    # and request.user.is_authenticated and request.user.username == creator:
+    if request.method == "POST":
+        credit_card.delete()
+
+    return redirect('credit_card_list')
+
+

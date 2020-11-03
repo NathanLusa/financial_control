@@ -2,7 +2,7 @@ from datetime import date
 from django import forms
 from django.forms import ModelForm
 
-from .models import Account, Category, Transaction, Transfer, ProgramedTransaction
+from .models import Account, Category, Transaction, Transfer, ProgramedTransaction, CreditCard
 from .fields import DateField  # , CharField, TimeField
 
 
@@ -77,3 +77,10 @@ class ProgramedTransactionForm(ModelForm):
         model = ProgramedTransaction
         fields = ['initial_date', 'account', 'frequency', 'value',
                   'description', 'observation', 'category', 'status']
+
+
+class CreditCardForm(ModelForm):
+
+    class Meta:
+        model = CreditCard
+        fields = ['description', 'payment_day', 'payment_account']

@@ -64,4 +64,9 @@ urlpatterns = [
          views.programed_transaction_generate, name='programed_transaction_generate'),
     path('programed_transactions/<int:pk>/generate_all',
          views.programed_transaction_generate_all, name='programed_transaction_generate_all'),
+
+    path('credit_cards/', views.credit_card_list, name='credit_card_list'),
+    path('credit_cards/new', views.credit_card_new, name='credit_card_new'),
+    path('credit_cards/<int:pk>', views.credit_card_form, name='credit_card_form'),
+    path('credit_cards/<int:pk>/delete', views.credit_card_delete, name='credit_card_delete'),
 ]

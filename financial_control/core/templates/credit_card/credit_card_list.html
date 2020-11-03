@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card shadow p-3 mb-5 bg-white rounded">
+      <div class="card-header">
+        <h4>Credit Cards</h4>
+        <a class="btn btn-outline-primary" href="{% url 'credit_card_new' %}">+</a>
+      </div>
+      <div class="card-body">
+        {% if credit_cards %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Description</th>
+              <th scope="col">Payment Day</th>
+              <th scope="col">Account</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for credit_card in credit_cards %}
+            <tr class="table-item-link" data-href="{% url 'credit_card_form' credit_card.id %}">
+              <th scope="row">{{ credit_card.id }}</th>
+              <td>{{ credit_card.description }}</td>
+              <td>{{ credit_card.payment_day }}</td>
+              <td>{{ credit_card.payment_account.description }}</td>
+            </tr>
+            {% endfor  %}
+          </tbody>
+        </table>
+        {% else %}
+        <div style="display: flex; justify-content: center;">
+          <h6>No data found</h6>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock main %}
