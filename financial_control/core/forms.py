@@ -83,4 +83,4 @@ class CreditCardForm(ModelForm):
 
     class Meta:
         model = CreditCard
-        fields = ['description', 'payment_day', 'payment_account']
+        fields = ['description', 'name_on_card', 'card_number', 'expiry_date', 'card_code', 'payment_day', 'payment_account']

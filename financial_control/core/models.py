@@ -270,6 +270,10 @@ class ProgramedTransaction(BaseModel):
 
 class CreditCard(BaseModel):
     description = models.CharField(max_length=100, null=False, blank=False)
+    name_on_card = models.CharField(max_length=50, null=False, blank=False)
+    card_number = models.CharField(max_length=16, null=False, blank=False)
+    expiry_date = models.CharField(max_length=5, null=False, blank=False)
+    card_code = models.CharField(max_length=3, null=False, blank=False)
     payment_day = IntegerRangeField(min_value=1, max_value=31)
     payment_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='credit_cards')
 
