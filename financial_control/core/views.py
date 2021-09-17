@@ -5,8 +5,8 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from .forms import AccountForm, CategoryForm, TransactionForm, TransferForm, ProgramedTransactionForm, CreditCardForm
-from .models import Account, Category, Transaction, MonthBalance, Transfer, ProgramedTransaction, CreditCard
+from .forms import AccountForm, CategoryForm, TransactionForm, TransferForm, ProgramedTransactionForm, CreditCardForm, TestForm
+from .models import Account, Category, Transaction, MonthBalance, Transfer, ProgramedTransaction, CreditCard, Test
 
 from .common import utils
 from .common.choices import NoYesChoices, StatusChoices, StatusTransactionChoices
@@ -58,8 +58,8 @@ def account_new(request):
         if form.is_valid():
             form.save()
             return redirect('account_list')
-
-    form = AccountForm()
+    else:
+        form = AccountForm()
     return render(request, 'account/account_form.html', {'form': form})
 
 
@@ -70,8 +70,9 @@ def account_form(request, pk):
         if form.is_valid():
             form.save()
             return redirect('account_list')
+    else:
+        form = AccountForm(instance=account)
 
-    form = AccountForm(instance=account)
     return render(request, 'account/account_form.html', {'form': form, 'id': pk})
 
 
@@ -99,8 +100,9 @@ def category_new(request):
         if form.is_valid():
             form.save()
             return redirect('category_list')
+    else:
+        form = CategoryForm()
 
-    form = CategoryForm()
     return render(request, 'category/category_form.html', {'form': form})
 
 
@@ -111,8 +113,9 @@ def category_form(request, pk):
         if form.is_valid():
             form.save()
             return redirect('category_list')
+    else:
+        form = CategoryForm(instance=category)
 
-    form = CategoryForm(instance=category)
     return render(request, 'category/category_form.html', {'form': form, 'id': pk})
 
 
@@ -147,13 +150,9 @@ def transaction_new(request):
         form = TransactionForm(request.POST)
         if form.is_valid():
             form.save()
-
             return redirect(next)
-        else:
-            print(f'errors: {form.errors}')
-            return JsonResponse({'error': 500, 'message': form.errors}, status=400)
-
-    form = TransactionForm()
+    else:
+        form = TransactionForm()
 
     param_ajax = request.GET.get('ajax')
     param_next = request.GET.get('next', 'transaction_list')
@@ -170,12 +169,9 @@ def transaction_form(request, pk):
         form = TransactionForm(request.POST, instance=transaction)
         if form.is_valid():
             form.save()
-
             return redirect(next)
-        else:
-            print(f'errors: {form.errors}')
-
-    form = TransactionForm(instance=transaction)
+    else:
+        form = TransactionForm(instance=transaction)
 
     param_ajax = request.GET.get('ajax')
     param_next = request.GET.get('next', 'transaction_list')
@@ -223,13 +219,9 @@ def transfer_new(request):
         form = TransferForm(request.POST)
         if form.is_valid():
             form.save()
-
             return redirect(next)
-        else:
-            print(f'errors: {form.errors}')
-            return JsonResponse({'error': 500, 'message': form.errors}, status=400)
-
-    form = TransferForm()
+    else:
+        form = TransferForm()
 
     param_ajax = request.GET.get('ajax')
     param_next = request.GET.get('next', 'transfer_list')
@@ -246,12 +238,9 @@ def transfer_form(request, pk):
         form = TransferForm(request.POST, instance=transfer)
         if form.is_valid():
             form.save()
-
             return redirect(next)
-        else:
-            print(f'errors: {form.errors}')
-
-    form = TransferForm(instance=transfer)
+    else:
+        form = TransferForm(instance=transfer)
 
     param_ajax = request.GET.get('ajax')
     param_next = request.GET.get('next', 'transfer_list')
@@ -281,19 +270,14 @@ def programed_transaction_list(request):
 
 
 def programed_transaction_new(request):
-    print('is here')
     if request.method == 'POST':
         next = request.GET.get('next', 'programed_transaction_list')
         form = ProgramedTransactionForm(request.POST)
         if form.is_valid():
             form.save()
-
             return redirect(next)
-        else:
-            print(f'errors: {form.errors}')
-            return JsonResponse({'error': 500, 'message': form.errors}, status=400)
-
-    form = ProgramedTransactionForm()
+    else:
+        form = ProgramedTransactionForm()
 
     param_ajax = request.GET.get('ajax')
     param_next = request.GET.get('next', 'programed_transaction_list')
@@ -311,12 +295,10 @@ def programed_transaction_form(request, pk):
             request.POST, instance=programed_transaction)
         if form.is_valid():
             form.save()
-
             return redirect(next)
-        else:
-            print(f'errors: {form.errors}')
+    else:
+        form = ProgramedTransactionForm(instance=programed_transaction)
 
-    form = ProgramedTransactionForm(instance=programed_transaction)
     transactions = Transaction.objects.filter(
         programed_transaction=programed_transaction)
 
@@ -382,8 +364,8 @@ def credit_card_new(request):
         if form.is_valid():
             form.save()
             return redirect('credit_card_list')
-
-    form = CreditCardForm()
+    else:
+        form = CreditCardForm()
     return render(request, 'credit_card/credit_card_form.html', {'form': form})
 
 
@@ -394,8 +376,8 @@ def credit_card_form(request, pk):
         if form.is_valid():
             form.save()
             return redirect('credit_card_list')
-
-    form = CreditCardForm(instance=credit_card)
+    else:
+        form = CreditCardForm(instance=credit_card)
     return render(request, 'credit_card/credit_card_form.html', {'form': form, 'id': pk})
 
 
@@ -409,3 +391,21 @@ def credit_card_delete(request, pk):
     return redirect('credit_card_list')
 
 
+def test_form(request):
+    if request.method == 'POST':
+        form = TestForm(request.POST)
+        if form.is_valid():
+            form.save()
+    else:
+        form = TestForm()
+
+    test_list = Test.objects.all()
+    return render(request, 'test_form.html', {'form': form, 'test_list': test_list})
+
+
+def test_delete(request, pk):
+    test = get_object_or_404(Test, pk=pk)
+    if request.method == "POST":
+        test.delete()
+
+    return redirect('test_form')

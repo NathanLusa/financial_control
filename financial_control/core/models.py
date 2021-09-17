@@ -275,24 +275,26 @@ class CreditCard(BaseModel):
     expiry_date = models.CharField(max_length=5, null=False, blank=False)
     card_code = models.CharField(max_length=3, null=False, blank=False)
     payment_day = IntegerRangeField(min_value=1, max_value=31)
-    payment_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='credit_cards')
+    payment_account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, related_name='credit_cards')
 
 
 class CreditCardInvoice(BaseModel):
-    credit_card = models.ForeignKey(CreditCard, on_delete=models.CASCADE, related_name='invoices')
-    payment_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='credit_card_invoices')
+    credit_card = models.ForeignKey(
+        CreditCard, on_delete=models.CASCADE, related_name='invoices')
+    payment_account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, related_name='credit_card_invoices')
     payment_date = models.DateField()
-    payment_transaction = models.OneToOneField(Transaction, on_delete=models.CASCADE, related_name='credit_card_invoice_payment')
-    is_open = models.IntegerField(choices=NoYesChoices.choices, default=int(NoYesChoices.YES))
+    payment_transaction = models.OneToOneField(
+        Transaction, on_delete=models.CASCADE, related_name='credit_card_invoice_payment')
+    is_open = models.IntegerField(
+        choices=NoYesChoices.choices, default=int(NoYesChoices.YES))
+    transactions = models.ManyToManyField(
+        Transaction, related_name='credit_card_transactions')
 
     def get_is_open_label(self):
         return NoYesChoices(self.is_open).label
 
 
-class CreditCardInvoiceDetail(BaseModel):
-    credit_card_invoice = models.ForeignKey(CreditCardInvoice, on_delete=models.CASCADE, related_name='invoice_details')
-    description = models.CharField(max_length=100, null=True, blank=True)
-    value = models.DecimalField(max_digits=15, decimal_places=2, default=0.0)
-    date = models.DateField()
-    category = models.ForeignKey(Category, on_delete=models.PROTECT)
-    observation = models.CharField(max_length=200, null=True, blank=True)
+class Test(BaseModel):
+    description = models.CharField(max_length=10)

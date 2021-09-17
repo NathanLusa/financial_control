@@ -68,5 +68,9 @@ urlpatterns = [
     path('credit_cards/', views.credit_card_list, name='credit_card_list'),
     path('credit_cards/new', views.credit_card_new, name='credit_card_new'),
     path('credit_cards/<int:pk>', views.credit_card_form, name='credit_card_form'),
-    path('credit_cards/<int:pk>/delete', views.credit_card_delete, name='credit_card_delete'),
+    path('credit_cards/<int:pk>/delete',
+         views.credit_card_delete, name='credit_card_delete'),
+
+    path('test_form/', views.test_form, name='test_form'),
+    path('test_delete/<int:pk>/delete', views.test_delete, name='test_delete'),
 ]

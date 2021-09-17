@@ -1,8 +1,8 @@
 from datetime import date
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 
-from .models import Account, Category, Transaction, Transfer, ProgramedTransaction, CreditCard
+from .models import Account, Category, Transaction, Transfer, ProgramedTransaction, CreditCard, Test
 from .fields import DateField  # , CharField, TimeField
 
 
@@ -83,4 +83,32 @@ class CreditCardForm(ModelForm):
 
     class Meta:
         model = CreditCard
-        fields = ['description', 'name_on_card', 'card_number', 'expiry_date', 'card_code', 'payment_day', 'payment_account']
+        fields = ['description', 'name_on_card', 'card_number',
+                  'expiry_date', 'card_code', 'payment_day', 'payment_account']
+
+
+class TestForm(ModelForm):
+    name = forms.CharField(max_length=30)
+    email = forms.EmailField(max_length=254)
+    message = forms.CharField(
+        max_length=2000,
+        widget=forms.Textarea(),
+        help_text='Write here your message!'
+    )
+    source = forms.CharField(       # A hidden input for internal use
+        max_length=50,              # tell from which page the user sent the message
+        widget=forms.HiddenInput()
+    )
+
+    def clean(self):
+        cleaned_data = super(TestForm, self).clean()
+        name = cleaned_data.get('name')
+        email = cleaned_data.get('email')
+        message = cleaned_data.get('message')
+        if not name and not email and not message:
+            raise forms.ValidationError(
+                f'name: {name} - email: {email} - message: {message}')
+
+    class Meta:
+        model = Test
+        fields = '__all__'
